@@ -40,7 +40,6 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
     private List<Flag> flags;
     private boolean respawn;
 
-    @SuppressWarnings("ForLoopReplaceableByForEach") //Because of BlueSlime TeamList ^^"
     public UFKGame(UltraFlagKeeper plugin, int nb)
     {
         super(plugin, "ultraflagkeeper", "UltraFlagKeeper", "", "", UFKGameLoop.class, nb);
