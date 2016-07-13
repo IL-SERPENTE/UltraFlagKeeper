@@ -10,17 +10,23 @@ import net.samagames.ufk.game.Flag;
 import net.samagames.ufk.game.UFKTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Rigner for project UltraFlagKeeper.
@@ -112,5 +118,19 @@ public class UFKListener implements Listener
                 event.getPlayer().getWorld().getPlayers().forEach(p -> ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet));
             }
         });
+    }
+
+    @EventHandler
+    public void onExplosion(BlockExplodeEvent event)
+    {
+        List<Block> list = new ArrayList<>(event.blockList());
+        this.plugin.getGame().getFlags().forEach(flag -> list.stream().filter(block -> block.getLocation().distanceSquared(flag.getLocation()) < 36).forEach(block -> event.blockList().remove(block)));
+    }
+
+    @EventHandler
+    public void onExplosion(EntityExplodeEvent event)
+    {
+        List<Block> list = new ArrayList<>(event.blockList());
+        this.plugin.getGame().getFlags().forEach(flag -> list.stream().filter(block -> block.getLocation().distanceSquared(flag.getLocation()) < 36).forEach(block -> event.blockList().remove(block)));
     }
 }

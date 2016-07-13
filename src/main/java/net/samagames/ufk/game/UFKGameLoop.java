@@ -118,6 +118,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
         this.nextEvent = new TimedEvent(14, 30, "Fin de capture", ChatColor.YELLOW, false, () ->
         {
             UFKTeam team = ((UFKGame)this.game).getWinnerTeam();
+            ((UFKGame)this.game).respawnManager.cancelAll();
             if (team == null)
             {
                 ((UFKGame) this.game).teleportDeathMatch();

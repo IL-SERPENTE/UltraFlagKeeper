@@ -37,12 +37,13 @@ import java.util.stream.Collectors;
  */
 public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
 {
-    private List<Flag> flags;
-    private boolean respawn;
+    protected List<Flag> flags;
+    protected boolean respawn;
+    protected RespawnManager respawnManager;
 
     public UFKGame(UltraFlagKeeper plugin, int nb)
     {
-        super(plugin, "ultraflagkeeper", "UltraFlagKeeper", "", "", UFKGameLoop.class, nb);
+        super(plugin, "ultraflagkeeper", "UltraFlagKeeper", "", "⚑", UFKGameLoop.class, nb);
 
         /** Reimplement team creation, to change order */
         this.teams.forEach(team -> SurvivalAPI.get().registerEvent(SurvivalAPI.EventType.WORLDLOADED, () -> team.getScoreboardTeam().unregister()));
@@ -68,6 +69,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
         for (int i = 0; i < SamaGamesAPI.get().getGameManager().getGameProperties().getOption("teams", new JsonPrimitive(2)).getAsInt() && i <= temporaryTeams.size(); ++i)
             this.registerTeam(temporaryTeams.get(i));
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+        this.respawnManager = new RespawnManager(plugin);
     }
 
     @SuppressWarnings("deprecation")
@@ -76,7 +78,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
     {
         this.flags = new ArrayList<>();
         Iterator<SurvivalTeam> iterator = this.teams.iterator();
-        SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("flags", new JsonArray()).getAsJsonArray().forEach(json ->
+        SamaGamesAPI.get().getGameManager().getGameProperties().getOption("flags", new JsonArray()).getAsJsonArray().forEach(json ->
         {
             String[] split = json.getAsString().split(", ");
             Flag flag = new Flag((UltraFlagKeeper)this.plugin, new Location(this.plugin.getServer().getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3])), Byte.parseByte(split[4]));
@@ -264,6 +266,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
                             Titles.sendTitle(player, 0, 20, 5, ChatColor.RED + "✞", ChatColor.RED + "Vous êtes mort !");
                             player.teleport(spawn);
                             player.setHealth(20.0D);
+                            this.respawnManager.respawn(player);
                         }
                     }
                     if (!this.respawn)
@@ -326,4 +329,6 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
             event.setDamage(0D);
         }
     }
+
+    //TODO Fix teleports
 }
