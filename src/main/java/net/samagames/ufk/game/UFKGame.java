@@ -249,7 +249,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
                             SurvivalTeam team = survivalPlayer.getTeam();
                             Location location = ((UFKTeam) team).getFlag().getLocation();
 
-                            Flag flag = this.flags.stream().filter(f -> f.getWearer().equals(playerUUID)).findFirst().orElse(null);
+                            Flag flag = this.flags.stream().filter(f -> f.getWearer() != null && f.getWearer().equals(playerUUID)).findFirst().orElse(null);
                             if (flag != null)
                             {
                                 this.coherenceMachine.getMessageManager().writeCustomMessage(ChatColor.YELLOW + "Le drapeau de l'équipe " + flag.getTeam().getChatColor() + flag.getTeam().getTeamName() + ChatColor.YELLOW + " est au sol.", true);
