@@ -265,6 +265,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
                             while (spawn.getBlock().getType() == Material.AIR);
                             Titles.sendTitle(player, 0, 20, 5, ChatColor.RED + "✞", ChatColor.RED + "Vous êtes mort !");
                             player.teleport(spawn);
+                            player.teleport(spawn);
                             player.setHealth(20.0D);
                             this.respawnManager.respawn(player);
                         }
