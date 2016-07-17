@@ -44,7 +44,7 @@ public class RespawnManager implements Listener
                     return ;
                 }
                 this.time++;
-                Titles.sendTitle(player, 1, 18, 1, "", ChatColor.GOLD + String.valueOf(time));
+                Titles.sendTitle(player, 1, 18, 1, "", ChatColor.GOLD + String.valueOf(10 - time));
             }
         }, 20L, 20L);
         this.players.put(player.getUniqueId(), new RespawnTask(jump == null ? 0 : jump.getDuration(), jump == null ? 0 : jump.getAmplifier(), task));
