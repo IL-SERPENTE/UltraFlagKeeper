@@ -35,7 +35,7 @@ public class Flag implements Listener
     private UUID wearer;
     private UFKTeam team;
     private List<UUID> captures;
-    private ArmorStand armorStand;
+    private List<ArmorStand> armorStands;
 
     public Flag(UltraFlagKeeper plugin, Location location, byte color)
     {
@@ -49,7 +49,7 @@ public class Flag implements Listener
         this.color = color;
         this.team = null;
         this.captures = new ArrayList<>();
-        this.armorStand = null;
+        this.armorStands = new ArrayList<>();
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
@@ -101,24 +101,29 @@ public class Flag implements Listener
     @SuppressWarnings("deprecation")
     public void drop(Location location)
     {
-        if (this.armorStand != null)
+        if (!this.armorStands.isEmpty())
             return ;
-        this.armorStand = location.getWorld().spawn(location, ArmorStand.class);
-        this.armorStand.setGravity(false);
-        this.armorStand.setVisible(false);
+
         ItemStack itemStack = new ItemStack(Material.BANNER);
         BannerMeta bannerMeta = (BannerMeta)itemStack.getItemMeta();
         bannerMeta.setBaseColor(DyeColor.getByWoolData((byte)this.team.getIcon().getDurability()));
         itemStack.setItemMeta(bannerMeta);
-        this.armorStand.setHelmet(itemStack);
+        for (int i = 0; i < 3; i++)
+        {
+            ArmorStand armorStand = location.getWorld().spawn(location.clone().add(0D, i, 0D), ArmorStand.class);
+            armorStand.setGravity(false);
+            armorStand.setVisible(false);
+            armorStand.setHelmet(itemStack);
+            this.armorStands.add(armorStand);
+        }
     }
 
     public void unDrop()
     {
-        if (this.armorStand == null)
+        if (this.armorStands.isEmpty())
             return ;
-        this.armorStand.remove();
-        this.armorStand = null;
+        this.armorStands.forEach(ArmorStand::remove);
+        this.armorStands.clear();
     }
 
     public UUID getWearer()
@@ -179,7 +184,7 @@ public class Flag implements Listener
     public void onPlayerInteract(PlayerInteractAtEntityEvent event)
     {
         SurvivalPlayer player;
-        if (this.armorStand != null && event.getRightClicked().getEntityId() == this.armorStand.getEntityId() && (player = this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId())) != null && !player.isSpectator())
+        if (this.armorStands.stream().filter(armorStand -> armorStand.getEntityId() == event.getRightClicked().getEntityId()).findFirst().orElse(null) != null && (player = this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId())) != null && !player.isSpectator())
         {
             if (player.getTeam().equals(this.team))
             {
@@ -200,7 +205,7 @@ public class Flag implements Listener
     public void onPlayerDamage(EntityDamageByEntityEvent event)
     {
         SurvivalPlayer player;
-        if (this.armorStand != null && event.getEntity().getEntityId() == this.armorStand.getEntityId() && (player = this.plugin.getGame().getPlayer(event.getDamager().getUniqueId())) != null && !player.isSpectator())
+        if (this.armorStands.stream().filter(armorStand -> armorStand.getEntityId() == event.getEntity().getEntityId()).findFirst().orElse(null) != null && (player = this.plugin.getGame().getPlayer(event.getDamager().getUniqueId())) != null && !player.isSpectator())
         {
             if (player.getTeam().equals(this.team))
             {
