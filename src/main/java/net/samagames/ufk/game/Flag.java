@@ -52,6 +52,11 @@ public class Flag implements Listener
         this.armorStands = new ArrayList<>();
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+        this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
+        {
+            if (!this.armorStands.isEmpty())
+                this.armorStands.get(0).setHeadPose(this.armorStands.get(0).getHeadPose().setY(this.armorStands.get(0).getHeadPose().getY() + 0.05D));
+        }, 2L, 2L);
     }
 
     public byte getColor()
@@ -108,12 +113,18 @@ public class Flag implements Listener
         BannerMeta bannerMeta = (BannerMeta)itemStack.getItemMeta();
         bannerMeta.setBaseColor(DyeColor.getByWoolData((byte)this.team.getIcon().getDurability()));
         itemStack.setItemMeta(bannerMeta);
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
         {
             ArmorStand armorStand = location.getWorld().spawn(location.clone().add(0D, i, 0D), ArmorStand.class);
             armorStand.setGravity(false);
             armorStand.setVisible(false);
-            armorStand.setHelmet(itemStack);
+            if (i == 0)
+                armorStand.setHelmet(itemStack);
+            else if (i == 3)
+            {
+                armorStand.setCustomName(this.team.getChatColor() + "Drapeau " + this.team.getTeamName());
+                armorStand.setCustomNameVisible(true);
+            }
             this.armorStands.add(armorStand);
         }
     }
