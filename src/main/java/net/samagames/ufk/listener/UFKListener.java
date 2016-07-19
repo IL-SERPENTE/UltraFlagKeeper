@@ -123,7 +123,7 @@ public class UFKListener implements Listener
                 ((UFKTeam)survivalPlayer.getTeam()).setScore(((UFKTeam)survivalPlayer.getTeam()).getScore() + 1);
                 PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment(event.getPlayer().getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(event.getPlayer().getInventory().getHelmet() == null ? new ItemStack(Material.AIR) : event.getPlayer().getPlayer().getInventory().getHelmet()));
                 event.getPlayer().getWorld().getPlayers().forEach(p -> ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet));
-                if (((UFKTeam)team).getScore() >= 5)
+                if (((UFKTeam)survivalPlayer.getTeam()).getScore() >= 5)
                     this.plugin.getGame().win(team);
             }
         });
