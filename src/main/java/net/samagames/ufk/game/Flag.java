@@ -50,6 +50,7 @@ public class Flag implements Listener
         this.captures = new ArrayList<>();
         this.armorStand = null;
         this.plugin = plugin;
+        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
     }
 
     public byte getColor()
