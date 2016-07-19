@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -117,6 +118,7 @@ public class Flag implements Listener
         if (this.armorStand == null)
             return ;
         this.armorStand.remove();
+        this.armorStand = null;
     }
 
     public UUID getWearer()
@@ -129,13 +131,28 @@ public class Flag implements Listener
         if (this.wearer != null)
         {
             Player player = this.plugin.getServer().getPlayer(this.wearer);
-            if (player != null && player.hasMetadata("oldstuff"))
+            if (player != null)
             {
-                player.getInventory().setHelmet((ItemStack) player.getMetadata("oldstuff").get(0).value());
+                player.getInventory().setHelmet(player.hasMetadata("oldstuff") ? (ItemStack) player.getMetadata("oldstuff").get(0).value() : new ItemStack(Material.AIR));
                 player.removeMetadata("oldstuff", this.plugin);
             }
         }
         this.wearer = wearer;
+        if (this.wearer != null)
+        {
+            Player player = this.plugin.getServer().getPlayer(this.wearer);
+            if (player != null)
+            {
+                ItemStack itemStack = new ItemStack(Material.BANNER);
+                BannerMeta bannerMeta = (BannerMeta) itemStack.getItemMeta();
+                bannerMeta.setBaseColor(DyeColor.getByWoolData((byte) this.getTeam().getIcon().getDurability()));
+                itemStack.setItemMeta(bannerMeta);
+                ItemStack save = player.getInventory().getHelmet();
+                player.getInventory().setHelmet(itemStack);
+                if (save != null)
+                    player.setMetadata("oldstuff", new FixedMetadataValue(this.plugin, save));
+            }
+        }
     }
 
     public UFKTeam getTeam()
@@ -174,7 +191,7 @@ public class Flag implements Listener
             {
                 this.unDrop();
                 this.setWearer(player.getUUID());
-                this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(ChatColor.YELLOW + "Le drapeau de l'équipe " + this.team.getChatColor() + this.team.getTeamName() + ChatColor.YELLOW + " est au sol.", true);
+                this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(event.getPlayer().getDisplayName() + ChatColor.YELLOW + " a récupéré le drapeau de l'équipe " + this.team.getChatColor() + this.team.getTeamName() + ChatColor.YELLOW + ".", true);
             }
         }
     }
@@ -195,7 +212,7 @@ public class Flag implements Listener
             {
                 this.unDrop();
                 this.setWearer(player.getUUID());
-                this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(ChatColor.YELLOW + "Le drapeau de l'équipe " + this.team.getChatColor() + this.team.getTeamName() + ChatColor.YELLOW + " est au sol.", true);
+                this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(((Player)event.getDamager()).getDisplayName() + ChatColor.YELLOW + " a récupéré le drapeau de l'équipe " + this.team.getChatColor() + this.team.getTeamName() + ChatColor.YELLOW + ".", true);
             }
         }
     }

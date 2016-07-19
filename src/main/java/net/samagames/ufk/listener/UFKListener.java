@@ -98,15 +98,6 @@ public class UFKListener implements Listener
                 flag.setWearer(event.getPlayer().getUniqueId());
                 this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(event.getPlayer().getDisplayName() + ChatColor.YELLOW + " a volé le drapeau de l'équipe " + team.getChatColor() + team.getTeamName(), true);
 
-                ItemStack itemStack = new ItemStack(Material.BANNER);
-                BannerMeta bannerMeta = (BannerMeta)itemStack.getItemMeta();
-                bannerMeta.setBaseColor(DyeColor.getByWoolData((byte)flag.getTeam().getIcon().getDurability()));
-                itemStack.setItemMeta(bannerMeta);
-                ItemStack save = event.getPlayer().getInventory().getHelmet();
-                event.getPlayer().getInventory().setHelmet(itemStack);
-                if (save != null && save.getType() != Material.AIR)
-                    event.getPlayer().setMetadata("oldstuff", new FixedMetadataValue(this.plugin, save));
-
                 return ;
             }
     }

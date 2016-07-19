@@ -15,6 +15,7 @@ import net.samagames.survivalapi.game.types.run.RunBasedTeamGame;
 import net.samagames.tools.Titles;
 import net.samagames.ufk.UltraFlagKeeper;
 import org.bukkit.*;
+import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -259,10 +260,9 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
                         {
                             spawn = location.clone().add(random.nextDouble() % 4D, 0D, random.nextDouble() % 4D);
                         }
-                        while (spawn.getBlock().getType() == Material.AIR);
+                        while (spawn.getBlock().getType() == Material.AIR || spawn.getBlock().getRelative(BlockFace.UP).getType() == Material.AIR);
                         Titles.sendTitle(player, 0, 20, 5, ChatColor.RED + "✞", ChatColor.RED + "Vous êtes mort !");
-                        player.teleport(spawn);
-                        player.teleport(spawn);
+                        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.teleport(spawn), 1L);
                         player.setHealth(20.0D);
                         this.respawnManager.respawn(player);
                     }
