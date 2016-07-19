@@ -56,7 +56,7 @@ public class Flag implements Listener
         {
             if (!this.armorStands.isEmpty())
                 this.armorStands.get(0).setHeadPose(this.armorStands.get(0).getHeadPose().setY(this.armorStands.get(0).getHeadPose().getY() + 0.05D));
-        }, 2L, 2L);
+        }, 1L, 1L);
     }
 
     public byte getColor()
@@ -115,7 +115,7 @@ public class Flag implements Listener
         itemStack.setItemMeta(bannerMeta);
         for (int i = 0; i < 4; i++)
         {
-            ArmorStand armorStand = location.getWorld().spawn(location.clone().add(0D, i, 0D), ArmorStand.class);
+            ArmorStand armorStand = location.getWorld().spawn(location.clone().add(0D, i == 3 ? 2.5 : i, 0D), ArmorStand.class);
             armorStand.setGravity(false);
             armorStand.setVisible(false);
             if (i == 0)
