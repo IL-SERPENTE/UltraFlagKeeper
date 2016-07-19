@@ -23,6 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
@@ -337,5 +338,11 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
             event.setCancelled(true);
     }
 
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event)
+    {
+        if (this.hasPlayer(event.getEntity()) && !this.isSpectator(event.getEntity()))
+            event.getDrops().add(new ItemStack(Material.COOKED_BEEF, 2));
+    }
     //TODO Fix teleports
 }

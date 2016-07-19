@@ -67,7 +67,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
     @Override
     public void createTeleportationEvent()
     {
-        this.nextEvent = new TimedEvent(14, 0, "Téléportation", ChatColor.YELLOW, true, () ->
+        this.nextEvent = new TimedEvent(9, 0, "Téléportation", ChatColor.YELLOW, true, () ->
         {
             SamaGamesAPI.get().getGameManager().setMaxReconnectTime(-1);
             this.game.disableDamages();
@@ -115,7 +115,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
     {
         this.fallDamages = true;
 
-        this.nextEvent = new TimedEvent(14, 30, "Fin de capture", ChatColor.YELLOW, false, () ->
+        this.nextEvent = new TimedEvent(9, 30, "Fin de capture", ChatColor.YELLOW, false, () ->
         {
             UFKTeam team = ((UFKGame)this.game).getWinnerTeam();
             ((UFKGame)this.game).respawnManager.cancelAll();

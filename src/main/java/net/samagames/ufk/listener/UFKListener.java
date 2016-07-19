@@ -112,14 +112,19 @@ public class UFKListener implements Listener
             SurvivalPlayer survivalPlayer;
             if (flag.getWearer() != null && flag.getWearer().equals(event.getPlayer().getUniqueId()) && (survivalPlayer = this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId())) != null && ((UFKTeam)survivalPlayer.getTeam()).getFlag().getLocation().distanceSquared(event.getPlayer().getLocation()) < 25)
             {
+                Flag own = ((UFKTeam)survivalPlayer.getTeam()).getFlag();
+                if (own.getWearer() != null)
+                    return ;
                 SurvivalTeam team = flag.getTeam();
                 flag.addCapture(event.getPlayer().getUniqueId());
                 flag.setWearer(null);
                 flag.respawn();
                 this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(event.getPlayer().getDisplayName() + ChatColor.YELLOW + " a ramené le drapeau de l'équipe " + team.getChatColor() + team.getTeamName() + ChatColor.YELLOW + " a sa base.", true);
-                ((UFKTeam)team).setScore(((UFKTeam)team).getScore() + 1);
+                ((UFKTeam)survivalPlayer.getTeam()).setScore(((UFKTeam)survivalPlayer.getTeam()).getScore() + 1);
                 PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment(event.getPlayer().getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(event.getPlayer().getInventory().getHelmet() == null ? new ItemStack(Material.AIR) : event.getPlayer().getPlayer().getInventory().getHelmet()));
                 event.getPlayer().getWorld().getPlayers().forEach(p -> ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet));
+                if (((UFKTeam)team).getScore() >= 5)
+                    this.plugin.getGame().win(team);
             }
         });
     }
