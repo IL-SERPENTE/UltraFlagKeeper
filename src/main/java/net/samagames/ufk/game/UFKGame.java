@@ -230,56 +230,56 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
 
 
                         this.coherenceMachine.getMessageManager().writeCustomMessage(message, true);
-
-                        try
-                        {
-                            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> SamaGamesAPI.get().getStatsManager().getPlayerStats(player.getUniqueId()).getUHCRunStatistics().incrByDeaths(1));
-                        }
-                        catch (Exception ignored) {}
-
-                        if (!this.respawn)
-                        {
-                            Titles.sendTitle(player, 0, 100, 5, ChatColor.RED + "✞", ChatColor.RED + "Vous êtes mort !");
-                            player.setGameMode(GameMode.SPECTATOR);
-                            player.setHealth(20.0D);
-                        }
-                        else
-                        {
-                            SurvivalPlayer survivalPlayer = this.getPlayer(playerUUID);
-                            SurvivalTeam team = survivalPlayer.getTeam();
-                            Location location = ((UFKTeam) team).getFlag().getLocation();
-
-                            Flag flag = this.flags.stream().filter(f -> f.getWearer() != null && f.getWearer().equals(playerUUID)).findFirst().orElse(null);
-                            if (flag != null)
-                            {
-                                this.coherenceMachine.getMessageManager().writeCustomMessage(ChatColor.YELLOW + "Le drapeau de l'équipe " + flag.getTeam().getChatColor() + flag.getTeam().getTeamName() + ChatColor.YELLOW + " est au sol.", true);
-                                flag.drop(player.getLocation());
-                                flag.setWearer(null);
-                            }
-                            Location spawn;
-                            Random random = new Random();
-                            do
-                            {
-                                spawn = location.clone().add(random.nextDouble() % 4D, 0D, random.nextDouble() % 4D);
-                            }
-                            while (spawn.getBlock().getType() == Material.AIR);
-                            Titles.sendTitle(player, 0, 20, 5, ChatColor.RED + "✞", ChatColor.RED + "Vous êtes mort !");
-                            player.teleport(spawn);
-                            player.teleport(spawn);
-                            player.setHealth(20.0D);
-                            this.respawnManager.respawn(player);
-                        }
                     }
+
+                    try
+                    {
+                        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> SamaGamesAPI.get().getStatsManager().getPlayerStats(player.getUniqueId()).getUHCRunStatistics().incrByDeaths(1));
+                    }
+                    catch (Exception ignored) {}
+
                     if (!this.respawn)
                     {
-                        this.plugin.getLogger().info("Stumping player " + playerUUID.toString() + "...");
-                        this.checkStump(playerUUID, silent);
-
-                        this.plugin.getLogger().info("Removing player " + playerUUID.toString() + "...");
-                        this.removeFromGame(playerUUID);
-
-                        this.dump();
+                        Titles.sendTitle(player, 0, 100, 5, ChatColor.RED + "✞", ChatColor.RED + "Vous êtes mort !");
+                        player.setGameMode(GameMode.SPECTATOR);
+                        player.setHealth(20.0D);
                     }
+                    else
+                    {
+                        SurvivalPlayer survivalPlayer = this.getPlayer(playerUUID);
+                        SurvivalTeam team = survivalPlayer.getTeam();
+                        Location location = ((UFKTeam) team).getFlag().getLocation();
+
+                        Flag flag = this.flags.stream().filter(f -> f.getWearer() != null && f.getWearer().equals(playerUUID)).findFirst().orElse(null);
+                        if (flag != null)
+                        {
+                            this.coherenceMachine.getMessageManager().writeCustomMessage(ChatColor.YELLOW + "Le drapeau de l'équipe " + flag.getTeam().getChatColor() + flag.getTeam().getTeamName() + ChatColor.YELLOW + " est au sol.", true);
+                            flag.drop(player.getLocation());
+                            flag.setWearer(null);
+                        }
+                        Location spawn;
+                        Random random = new Random();
+                        do
+                        {
+                            spawn = location.clone().add(random.nextDouble() % 4D, 0D, random.nextDouble() % 4D);
+                        }
+                        while (spawn.getBlock().getType() == Material.AIR);
+                        Titles.sendTitle(player, 0, 20, 5, ChatColor.RED + "✞", ChatColor.RED + "Vous êtes mort !");
+                        player.teleport(spawn);
+                        player.teleport(spawn);
+                        player.setHealth(20.0D);
+                        this.respawnManager.respawn(player);
+                    }
+                }
+                if (!this.respawn)
+                {
+                    this.plugin.getLogger().info("Stumping player " + playerUUID.toString() + "...");
+                    this.checkStump(playerUUID, silent);
+
+                    this.plugin.getLogger().info("Removing player " + playerUUID.toString() + "...");
+                    this.removeFromGame(playerUUID);
+
+                    this.dump();
                 }
             }
         }
