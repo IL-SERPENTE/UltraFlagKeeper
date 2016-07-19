@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -124,6 +125,15 @@ public class Flag implements Listener
 
     public void setWearer(UUID wearer)
     {
+        if (this.wearer != null)
+        {
+            Player player = this.plugin.getServer().getPlayer(this.wearer);
+            if (player != null && player.hasMetadata("oldstuff"))
+            {
+                player.getInventory().setHelmet((ItemStack) player.getMetadata("oldstuff").get(0).value());
+                player.removeMetadata("oldstuff", this.plugin);
+            }
+        }
         this.wearer = wearer;
     }
 
@@ -171,6 +181,21 @@ public class Flag implements Listener
     @EventHandler
     public void onPlayerDamage(EntityDamageByEntityEvent event)
     {
-
+        SurvivalPlayer player;
+        if (this.armorStand != null && event.getEntity().getEntityId() == this.armorStand.getEntityId() && (player = this.plugin.getGame().getPlayer(event.getDamager().getUniqueId())) != null && !player.isSpectator())
+        {
+            if (player.getTeam().equals(this.team))
+            {
+                this.unDrop();
+                this.respawn();
+                this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(((Player)event.getDamager()).getDisplayName() + ChatColor.YELLOW + " a remis le drapeau de l'équipe " + this.team.getChatColor() + this.team.getTeamName() + ChatColor.YELLOW + " à sa base.", true);
+            }
+            else
+            {
+                this.unDrop();
+                this.setWearer(player.getUUID());
+                this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(ChatColor.YELLOW + "Le drapeau de l'équipe " + this.team.getChatColor() + this.team.getTeamName() + ChatColor.YELLOW + " est au sol.", true);
+            }
+        }
     }
 }

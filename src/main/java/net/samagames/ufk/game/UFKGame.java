@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.metadata.MetadataValue;
@@ -98,12 +99,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
             if (flag.getWearer() == null || (player = this.plugin.getServer().getPlayer(flag.getWearer())) == null)
                 return ;
             player.getWorld().spawnParticle(Particle.CRIT, player.getLocation().add(0D, 1D, 0D), 3, 0.3D, 1D, 0.3D, 0.1D);
-            ItemStack itemStack = new ItemStack(Material.BANNER);
-            BannerMeta bannerMeta = (BannerMeta)itemStack.getItemMeta();
-            bannerMeta.setBaseColor(DyeColor.getByWoolData((byte)flag.getTeam().getIcon().getDurability()));
-            itemStack.setItemMeta(bannerMeta);
-            PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment(player.getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(itemStack));
-            player.getWorld().getPlayers().forEach(p -> ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet));
+
         }), 1L, 1L);
     }
 
@@ -329,6 +325,13 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
             event.setCancelled(true);
             event.setDamage(0D);
         }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event)
+    {
+        if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.BANNER)
+            event.setCancelled(true);
     }
 
     //TODO Fix teleports

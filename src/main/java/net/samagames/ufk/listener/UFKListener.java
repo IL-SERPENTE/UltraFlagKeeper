@@ -9,6 +9,7 @@ import net.samagames.ufk.UltraFlagKeeper;
 import net.samagames.ufk.game.Flag;
 import net.samagames.ufk.game.UFKTeam;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
@@ -24,6 +25,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +97,16 @@ public class UFKListener implements Listener
                 flag.destroy();
                 flag.setWearer(event.getPlayer().getUniqueId());
                 this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(event.getPlayer().getDisplayName() + ChatColor.YELLOW + " a volé le drapeau de l'équipe " + team.getChatColor() + team.getTeamName(), true);
+
+                ItemStack itemStack = new ItemStack(Material.BANNER);
+                BannerMeta bannerMeta = (BannerMeta)itemStack.getItemMeta();
+                bannerMeta.setBaseColor(DyeColor.getByWoolData((byte)flag.getTeam().getIcon().getDurability()));
+                itemStack.setItemMeta(bannerMeta);
+                ItemStack save = event.getPlayer().getInventory().getHelmet();
+                event.getPlayer().getInventory().setHelmet(itemStack);
+                if (save != null && save.getType() != Material.AIR)
+                    event.getPlayer().setMetadata("oldstuff", new FixedMetadataValue(this.plugin, save));
+
                 return ;
             }
     }
