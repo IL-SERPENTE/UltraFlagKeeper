@@ -125,7 +125,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
             {
                 if (!logout)
                 {
-                    Player player = Bukkit.getPlayer(playerUUID);
+                    final Player player = Bukkit.getPlayer(playerUUID);
                     MetadataValue lastDamager = player.hasMetadata("lastDamager") ? player.getMetadata("lastDamager").get(0) : null;
                     Player killer = null;
 
@@ -261,8 +261,9 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
                             spawn = location.clone().add(random.nextDouble() % 4D, 0D, random.nextDouble() % 4D);
                         }
                         while (spawn.getBlock().getType() == Material.AIR || spawn.getBlock().getRelative(BlockFace.UP).getType() == Material.AIR);
+                        final Location finalSpawn = spawn;
                         Titles.sendTitle(player, 0, 20, 5, ChatColor.RED + "✞", ChatColor.RED + "Vous êtes mort !");
-                        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.teleport(spawn), 1L);
+                        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.teleport(finalSpawn), 1L);
                         player.setHealth(20.0D);
                         this.respawnManager.respawn(player);
                     }
