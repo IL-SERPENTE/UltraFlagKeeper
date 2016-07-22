@@ -35,7 +35,7 @@ public class RespawnManager implements Listener
         player.setWalkSpeed(0F);
         player.removePotionEffect(PotionEffectType.JUMP);
         player.addPotionEffect(PotionEffectType.JUMP.createEffect(Integer.MAX_VALUE, 128));
-        this.plugin.getServer().getOnlinePlayers().forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(((CraftPlayer)player).getHandle().getId())));
+        this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(((CraftPlayer)player).getHandle().getId())));
         BukkitTask task = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new Runnable()
         {
             private int time = 1;
@@ -45,7 +45,7 @@ public class RespawnManager implements Listener
             {
                 if (this.time == 10)
                 {
-                    RespawnManager.this.plugin.getServer().getOnlinePlayers().forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player).getHandle())));
+                    RespawnManager.this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player).getHandle())));
                     unstuck(player);
                     return ;
                 }
