@@ -1,6 +1,7 @@
 package net.samagames.ufk.game;
 
 import net.minecraft.server.v1_9_R2.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_9_R2.PacketPlayOutNamedEntitySpawn;
 import net.samagames.tools.Titles;
 import net.samagames.ufk.UltraFlagKeeper;
 import org.bukkit.ChatColor;
@@ -44,7 +45,7 @@ public class RespawnManager implements Listener
             {
                 if (this.time == 10)
                 {
-                    RespawnManager.this.plugin.getServer().getOnlinePlayers().forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(((CraftPlayer)player).getHandle().getId())));
+                    RespawnManager.this.plugin.getServer().getOnlinePlayers().forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player).getHandle())));
                     unstuck(player);
                     return ;
                 }

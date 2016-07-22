@@ -52,7 +52,7 @@ public class UFKListener implements Listener
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
             return ;
         for (Flag flag : this.plugin.getGame().getFlags())
-            if (flag.getLocation().clone().subtract(0D, 3D, 0D).distanceSquared(event.getBlockPlaced().getLocation()) < 36)
+            if (flag.getLocation().clone().subtract(0D, 3D, 0D).distanceSquared(event.getBlockPlaced().getLocation()) < 25)
             {
                 event.getPlayer().sendMessage(ChatColor.RED + "Vous ne pouvez pas placer de bloc aussi près du drapeau.");
                 event.setCancelled(true);
@@ -66,7 +66,7 @@ public class UFKListener implements Listener
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
             return ;
         for (Flag flag : this.plugin.getGame().getFlags())
-            if (flag.getLocation().clone().subtract(0D, 3D, 0D).distanceSquared(event.getBlock().getLocation()) < 36)
+            if (flag.getLocation().clone().subtract(0D, 3D, 0D).distanceSquared(event.getBlock().getLocation()) < 25)
             {
                 event.getPlayer().sendMessage(ChatColor.RED + "Vous ne pouvez pas casser de bloc aussi près du drapeau.");
                 event.setCancelled(true);
@@ -88,7 +88,7 @@ public class UFKListener implements Listener
             return ;
 
         for (Flag flag : this.plugin.getGame().getFlags())
-            if (flag.getLocation().distanceSquared(event.getClickedBlock().getLocation()) < 36 && flag.getColor() != survivalPlayer.getTeam().getIcon().getDurability())
+            if (flag.getLocation().distanceSquared(event.getClickedBlock().getLocation()) < 25 && flag.getColor() != survivalPlayer.getTeam().getIcon().getDurability())
             {
                 SurvivalTeam team = flag.getTeam();
                 flag.destroy();
