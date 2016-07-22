@@ -80,7 +80,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
     {
         this.flags = new ArrayList<>();
         Iterator<SurvivalTeam> iterator = this.teams.iterator();
-        SamaGamesAPI.get().getGameManager().getGameProperties().getOption("flags", new JsonArray()).getAsJsonArray().forEach(json ->
+        SamaGamesAPI.get().getGameManager().getGameProperties().getConfig("flags", new JsonArray()).getAsJsonArray().forEach(json ->
         {
             String[] split = json.getAsString().split(", ");
             Flag flag = new Flag((UltraFlagKeeper)this.plugin, new Location(this.plugin.getServer().getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3])), Byte.parseByte(split[4]));
