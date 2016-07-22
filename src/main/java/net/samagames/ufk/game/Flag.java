@@ -142,6 +142,7 @@ public class Flag implements Listener
         return this.wearer;
     }
 
+    @SuppressWarnings("deprecation")
     public void setWearer(UUID wearer)
     {
         if (this.wearer != null)
@@ -189,6 +190,11 @@ public class Flag implements Listener
     public List<UUID> getCaptures()
     {
         return this.captures;
+    }
+
+    public List<ArmorStand> getArmorStands()
+    {
+        return this.armorStands;
     }
 
     @EventHandler

@@ -2,6 +2,7 @@ package net.samagames.ufk.game;
 
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.survivalapi.game.SurvivalGame;
+import net.samagames.survivalapi.game.SurvivalGameLoop;
 import net.samagames.survivalapi.game.SurvivalPlayer;
 import net.samagames.survivalapi.game.SurvivalTeam;
 import net.samagames.survivalapi.game.types.SurvivalTeamGame;
@@ -138,6 +139,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
         this.nextEvent = this.nextEvent.copy(3, 0);
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event)
     {
@@ -285,6 +287,13 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
                     for (SurvivalTeam team : ((SurvivalTeamGame)this.game).getTeams())
                         if (!team.isDead())
                             objective.setLine(lastLine++, ChatColor.GRAY + "Équipe " + team.getTeamName() + ChatColor.GRAY + " : " + ChatColor.WHITE + ((UFKTeam)team).getScore());
+
+                objective.setLine(lastLine++, ChatColor.BLUE + "");
+
+                if (this.game instanceof SurvivalTeamGame)
+                    for (SurvivalTeam team : ((SurvivalTeamGame)this.game).getTeams())
+                        if (!team.isDead())
+                            objective.setLine(lastLine++, ChatColor.GRAY + "Drapeau " + team.getTeamName() + ChatColor.GRAY + " : " + ChatColor.WHITE + SurvivalGameLoop.getDirection(player.getLocation(), ((UFKTeam)team).getFlag().getWearer() == null ? ((UFKTeam)team).getFlag().getArmorStands().isEmpty() ? ((UFKTeam)team).getFlag().getLocation() : ((UFKTeam)team).getFlag().getArmorStands().get(0).getLocation() : this.plugin.getServer().getPlayer(((UFKTeam)team).getFlag().getWearer()).getLocation()));
 
                 objective.setLine(lastLine++, ChatColor.DARK_AQUA + "");
 

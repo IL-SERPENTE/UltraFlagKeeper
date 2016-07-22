@@ -26,7 +26,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -46,7 +45,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
 
     public UFKGame(UltraFlagKeeper plugin, int nb)
     {
-        super(plugin, "ultraflagkeeper", "UltraFlagKeeper", "", "⚑", UFKGameLoop.class, nb);
+        super(plugin, "ultraflagkeeper", "UHCFlag", "", "⚑", UFKGameLoop.class, nb);
 
         /** Reimplement team creation, to change order */
         this.teams.forEach(team -> SurvivalAPI.get().registerEvent(SurvivalAPI.EventType.WORLDLOADED, () -> team.getScoreboardTeam().unregister()));
