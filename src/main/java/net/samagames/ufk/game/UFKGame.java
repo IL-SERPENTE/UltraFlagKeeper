@@ -2,8 +2,6 @@ package net.samagames.ufk.game;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
-import net.minecraft.server.v1_9_R2.EnumItemSlot;
-import net.minecraft.server.v1_9_R2.PacketPlayOutEntityEquipment;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.Status;
 import net.samagames.survivalapi.SurvivalAPI;
@@ -16,8 +14,6 @@ import net.samagames.tools.Titles;
 import net.samagames.ufk.UltraFlagKeeper;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,7 +41,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
 
     public UFKGame(UltraFlagKeeper plugin, int nb)
     {
-        super(plugin, "ultraflagkeeper", "UHCFlag", "", "⚑", UFKGameLoop.class, nb);
+        super(plugin, "ultraflagkeeper", "Run4Flag", "", "⚑", UFKGameLoop.class, nb);
 
         /** Reimplement team creation, to change order */
         this.teams.forEach(team -> SurvivalAPI.get().registerEvent(SurvivalAPI.EventType.WORLDLOADED, () -> team.getScoreboardTeam().unregister()));

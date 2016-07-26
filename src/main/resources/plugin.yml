@@ -8,3 +8,8 @@ load: STARTUP
 
 author: Rigner
 website: http://samagames.net/
+
+commands:
+    flag:
+        description:
+        usage:

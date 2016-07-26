@@ -15,6 +15,7 @@ import net.samagames.survivalapi.modules.gameplay.ConstantPotionModule;
 import net.samagames.survivalapi.modules.gameplay.RapidFoodModule;
 import net.samagames.survivalapi.modules.gameplay.RapidUsefullModule;
 import net.samagames.ufk.game.UFKGame;
+import net.samagames.ufk.listener.FlagCommandExecutor;
 import net.samagames.ufk.listener.UFKListener;
 import net.samagames.ufk.modules.CustomRapidFoodModuleConfiguration;
 import net.samagames.ufk.modules.CustomRapidOresModuleConfiguration;
@@ -76,6 +77,7 @@ public class UltraFlagKeeper extends JavaPlugin
         SamaGamesAPI.get().getGameManager().setMaxReconnectTime(10);
         SamaGamesAPI.get().getGameManager().registerGame(this.game);
 
+        this.getServer().getPluginCommand("flag").setExecutor(new FlagCommandExecutor(this));
         this.getServer().getPluginManager().registerEvents(new UFKListener(this), this);
     }
 

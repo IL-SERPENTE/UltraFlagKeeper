@@ -41,12 +41,14 @@ import java.util.UUID;
 public class UFKGameLoop extends RunBasedGameLoop implements Listener
 {
     private boolean fallDamages;
+    protected boolean flagCommandEnabled;
 
     public UFKGameLoop(JavaPlugin plugin, Server server, SurvivalGame game)
     {
         super(plugin, server, game);
 
         this.fallDamages = false;
+        this.flagCommandEnabled = false;
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -63,6 +65,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
             this.createTeleportationEvent();
             this.blocksProtected = false;
         });
+        this.flagCommandEnabled = true;
     }
 
     @Override
@@ -71,6 +74,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
         this.nextEvent = new TimedEvent(9, 0, "Téléportation", ChatColor.YELLOW, true, () ->
         {
             SamaGamesAPI.get().getGameManager().setMaxReconnectTime(-1);
+            this.flagCommandEnabled = false;
             this.game.disableDamages();
             this.game.teleport();
 
@@ -326,5 +330,10 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
 
             this.nextEvent.decrement();
         }
+    }
+
+    public boolean isFlagCommandEnabled()
+    {
+        return this.flagCommandEnabled;
     }
 }
