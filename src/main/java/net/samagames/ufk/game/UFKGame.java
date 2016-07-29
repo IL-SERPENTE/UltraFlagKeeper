@@ -9,6 +9,7 @@ import net.samagames.survivalapi.game.GameException;
 import net.samagames.survivalapi.game.SurvivalPlayer;
 import net.samagames.survivalapi.game.SurvivalTeam;
 import net.samagames.survivalapi.game.WaitingBlock;
+import net.samagames.survivalapi.game.types.SurvivalTeamGame;
 import net.samagames.survivalapi.game.types.run.RunBasedTeamGame;
 import net.samagames.tools.Titles;
 import net.samagames.ufk.UltraFlagKeeper;
@@ -27,7 +28,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.lang.reflect.Field;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -41,7 +44,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
 
     public UFKGame(UltraFlagKeeper plugin, int nb)
     {
-        super(plugin, "ultraflagkeeper", "Run4Flag", "", "⚑", UFKGameLoop.class, nb);
+        super(plugin, "ultraflagkeeper", "Run4Flag", "Cours, drapeau, cours !", "⚑", UFKGameLoop.class, nb);
 
         /** Reimplement team creation, to change order */
         this.teams.forEach(team -> SurvivalAPI.get().registerEvent(SurvivalAPI.EventType.WORLDLOADED, () -> team.getScoreboardTeam().unregister()));
@@ -68,6 +71,18 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
             this.registerTeam(temporaryTeams.get(i));
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
         this.respawnManager = new RespawnManager(plugin);
+
+        try
+        {
+            UFKGuiSelectorTeam.setGame(this);
+            Field field = SurvivalTeamGame.class.getDeclaredField("teamSelector");
+            field.setAccessible(true);
+            field.set(this, new UFKTeamSelector(this));
+        }
+        catch (Exception e)
+        {
+            this.plugin.getLogger().log(Level.SEVERE, "Error initiating team selector", e);
+        }
     }
 
     @SuppressWarnings("deprecation")
