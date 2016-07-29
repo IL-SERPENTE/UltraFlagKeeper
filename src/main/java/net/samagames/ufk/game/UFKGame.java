@@ -11,6 +11,7 @@ import net.samagames.survivalapi.game.SurvivalTeam;
 import net.samagames.survivalapi.game.WaitingBlock;
 import net.samagames.survivalapi.game.types.SurvivalTeamGame;
 import net.samagames.survivalapi.game.types.run.RunBasedTeamGame;
+import net.samagames.survivalapi.game.types.team.SurvivalTeamSelector;
 import net.samagames.tools.Titles;
 import net.samagames.ufk.UltraFlagKeeper;
 import org.bukkit.*;
@@ -74,6 +75,9 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
 
         try
         {
+            Field field1 = SurvivalTeamSelector.class.getDeclaredField("instance");
+            field1.setAccessible(true);
+            field1.set(null, null);
             UFKGuiSelectorTeam.setGame(this);
             Field field = SurvivalTeamGame.class.getDeclaredField("teamSelector");
             field.setAccessible(true);
