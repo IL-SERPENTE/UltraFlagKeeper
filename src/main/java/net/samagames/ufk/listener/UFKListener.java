@@ -130,13 +130,13 @@ public class UFKListener implements Listener
     public void onExplosion(BlockExplodeEvent event)
     {
         List<Block> list = new ArrayList<>(event.blockList());
-        this.plugin.getGame().getFlags().forEach(flag -> list.stream().filter(block -> block.getLocation().distanceSquared(flag.getLocation()) < 36).forEach(block -> event.blockList().remove(block)));
+        this.plugin.getGame().getFlags().forEach(flag -> list.stream().filter(block -> block.getLocation().distanceSquared(flag.getLocation()) < 49).forEach(block -> event.blockList().remove(block)));
     }
 
     @EventHandler
     public void onExplosion(EntityExplodeEvent event)
     {
         List<Block> list = new ArrayList<>(event.blockList());
-        this.plugin.getGame().getFlags().forEach(flag -> list.stream().filter(block -> block.getLocation().distanceSquared(flag.getLocation()) < 36).forEach(block -> event.blockList().remove(block)));
+        this.plugin.getGame().getFlags().forEach(flag -> list.stream().filter(block -> block.getLocation().distanceSquared(flag.getLocation()) < 49).forEach(block -> event.blockList().remove(block)));
     }
 }

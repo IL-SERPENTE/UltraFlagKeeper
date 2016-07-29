@@ -297,7 +297,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
                 if (this.game instanceof SurvivalTeamGame)
                     for (SurvivalTeam team : ((SurvivalTeamGame)this.game).getTeams())
                         if (!team.isDead())
-                            objective.setLine(lastLine++, ChatColor.GRAY + "Drapeau " + team.getTeamName() + ChatColor.GRAY + " : " + ChatColor.WHITE + SurvivalGameLoop.getDirection(player.getLocation(), ((UFKTeam)team).getFlag().getWearer() == null ? ((UFKTeam)team).getFlag().getArmorStands().isEmpty() ? ((UFKTeam)team).getFlag().getLocation() : ((UFKTeam)team).getFlag().getArmorStands().get(0).getLocation() : this.plugin.getServer().getPlayer(((UFKTeam)team).getFlag().getWearer()).getLocation()));
+                            objective.setLine(lastLine++, ChatColor.GRAY + "Drapeau " + team.getChatColor() + team.getTeamName() + ChatColor.GRAY + " : " + ChatColor.WHITE + SurvivalGameLoop.getDirection(player.getLocation(), ((UFKTeam)team).getFlag().getWearer() == null ? ((UFKTeam)team).getFlag().getArmorStands().isEmpty() ? ((UFKTeam)team).getFlag().getLocation() : ((UFKTeam)team).getFlag().getArmorStands().get(0).getLocation() : this.plugin.getServer().getPlayer(((UFKTeam)team).getFlag().getWearer()).getLocation()));
 
                 objective.setLine(lastLine++, ChatColor.DARK_AQUA + "");
 
