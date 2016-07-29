@@ -51,13 +51,13 @@ public class UFKStatisticsHelper implements SurvivalGameStatisticsHelper
         SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getUltraFlagKeeperStatistics().incrByWins(1);
     }
 
-    public void increaseFlagCaptured(UUID uuid)
+    public void increaseFlagsCaptured(UUID uuid)
     {
-        SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getUltraFlagKeeperStatistics().incrByFlagCaptured(1);
+        SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getUltraFlagKeeperStatistics().incrByFlagsCaptured(1);
     }
 
-    public void increaseFlagReturned(UUID uuid)
+    public void increaseFlagsReturned(UUID uuid)
     {
-        SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getUltraFlagKeeperStatistics().incrByFlagReturned(1);
+        SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getUltraFlagKeeperStatistics().incrByFlagsReturned(1);
     }
 }

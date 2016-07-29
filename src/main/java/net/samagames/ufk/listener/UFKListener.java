@@ -119,7 +119,7 @@ public class UFKListener implements Listener
                 flag.setWearer(null);
                 flag.respawn();
 
-                ((UFKStatisticsHelper) this.plugin.getGame().getSurvivalGameStatisticsHelper()).increaseFlagCaptured(survivalPlayer.getUUID());
+                ((UFKStatisticsHelper) this.plugin.getGame().getSurvivalGameStatisticsHelper()).increaseFlagsCaptured(survivalPlayer.getUUID());
 
                 this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(event.getPlayer().getDisplayName() + ChatColor.YELLOW + " a ramené le drapeau de l'équipe " + team.getChatColor() + team.getTeamName() + ChatColor.YELLOW + " a sa base.", true);
                 ((UFKTeam)survivalPlayer.getTeam()).setScore(((UFKTeam)survivalPlayer.getTeam()).getScore() + 1);
