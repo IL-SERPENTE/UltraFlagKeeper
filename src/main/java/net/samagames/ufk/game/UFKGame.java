@@ -19,6 +19,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -78,10 +79,16 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
             Field field1 = SurvivalTeamSelector.class.getDeclaredField("instance");
             field1.setAccessible(true);
             field1.set(null, null);
+
             UFKGuiSelectorTeam.setGame(this);
+
             Field field = SurvivalTeamGame.class.getDeclaredField("teamSelector");
             field.setAccessible(true);
-            field.set(this, new UFKTeamSelector(this));
+            UFKTeamSelector teamSelector = new UFKTeamSelector(this);
+            SurvivalTeamSelector selector = (SurvivalTeamSelector)field.get(this);
+            field.set(this, teamSelector);
+            this.plugin.getServer().getPluginManager().registerEvents(teamSelector, this.plugin);
+            HandlerList.unregisterAll(selector);
         }
         catch (Exception e)
         {
