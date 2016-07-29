@@ -15,19 +15,16 @@ import net.samagames.survivalapi.modules.gameplay.ConstantPotionModule;
 import net.samagames.survivalapi.modules.gameplay.RapidFoodModule;
 import net.samagames.survivalapi.modules.gameplay.RapidUsefullModule;
 import net.samagames.ufk.game.UFKGame;
+import net.samagames.ufk.game.UFKStatisticsHelper;
 import net.samagames.ufk.listener.FlagCommandExecutor;
 import net.samagames.ufk.listener.UFKListener;
 import net.samagames.ufk.modules.CustomRapidFoodModuleConfiguration;
 import net.samagames.ufk.modules.CustomRapidOresModuleConfiguration;
 import net.samagames.ufk.modules.CustomRapidUsefullModuleConfiguration;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.function.Consumer;
 
 /**
  * Created by Rigner for project UltraFlagKeeper.
@@ -75,6 +72,7 @@ public class UltraFlagKeeper extends JavaPlugin
         SurvivalAPI.get().unloadModule(RandomChestModule.class);
 
         SamaGamesAPI.get().getGameManager().setMaxReconnectTime(10);
+        SamaGamesAPI.get().getGameManager().setGameStatisticsHelper(new UFKStatisticsHelper());
         SamaGamesAPI.get().getGameManager().registerGame(this.game);
 
         this.getServer().getPluginCommand("flag").setExecutor(new FlagCommandExecutor(this));

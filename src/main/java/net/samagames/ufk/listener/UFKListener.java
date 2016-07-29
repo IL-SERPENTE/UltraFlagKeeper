@@ -2,11 +2,13 @@ package net.samagames.ufk.listener;
 
 import net.minecraft.server.v1_9_R2.EnumItemSlot;
 import net.minecraft.server.v1_9_R2.PacketPlayOutEntityEquipment;
+import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.Status;
 import net.samagames.survivalapi.game.SurvivalPlayer;
 import net.samagames.survivalapi.game.SurvivalTeam;
 import net.samagames.ufk.UltraFlagKeeper;
 import net.samagames.ufk.game.Flag;
+import net.samagames.ufk.game.UFKStatisticsHelper;
 import net.samagames.ufk.game.UFKTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -116,6 +118,9 @@ public class UFKListener implements Listener
                 flag.addCapture(event.getPlayer().getUniqueId());
                 flag.setWearer(null);
                 flag.respawn();
+
+                ((UFKStatisticsHelper) this.plugin.getGame().getSurvivalGameStatisticsHelper()).increaseFlagCaptured(survivalPlayer.getUUID());
+
                 this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(event.getPlayer().getDisplayName() + ChatColor.YELLOW + " a ramené le drapeau de l'équipe " + team.getChatColor() + team.getTeamName() + ChatColor.YELLOW + " a sa base.", true);
                 ((UFKTeam)survivalPlayer.getTeam()).setScore(((UFKTeam)survivalPlayer.getTeam()).getScore() + 1);
                 PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment(event.getPlayer().getEntityId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(event.getPlayer().getInventory().getHelmet() == null ? new ItemStack(Material.AIR) : event.getPlayer().getPlayer().getInventory().getHelmet()));

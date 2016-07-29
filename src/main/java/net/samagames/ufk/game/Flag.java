@@ -229,6 +229,8 @@ public class Flag implements Listener
                 this.unDrop();
                 this.respawn();
                 this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(((Player)event.getDamager()).getDisplayName() + ChatColor.YELLOW + " a remis le drapeau de l'équipe " + this.team.getChatColor() + this.team.getTeamName() + ChatColor.YELLOW + " à sa base.", true);
+
+                ((UFKStatisticsHelper) this.plugin.getGame().getSurvivalGameStatisticsHelper()).increaseFlagCaptured(player.getUUID());
             }
             else
             {
