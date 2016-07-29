@@ -53,7 +53,7 @@ public class UFKGuiSelectorTeam extends GuiSelectTeam
 
         String[] lores = new String[]{ChatColor.GREEN + "Réservé aux VIP :)"};
 
-        this.setSlotData("Changer le nom de l'équipe", Material.BOOK_AND_QUILL, 40, lores, "teamname");
+        this.setSlotData("Changer le nom de l'équipe", Material.BOOK_AND_QUILL, 39, lores, "teamname");
         this.setSlotData("Inviter un joueur", Material.FEATHER, 41, lores, "invit");
 
         player.openInventory(this.inventory);
