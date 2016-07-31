@@ -186,7 +186,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
 
                                 try
                                 {
-                                    SamaGamesAPI.get().getStatsManager().getPlayerStats(finalKiller.getUniqueId()).getUHCRunStatistics().incrByKills(1);
+                                    SamaGamesAPI.get().getStatsManager().getPlayerStats(finalKiller.getUniqueId()).getUltraFlagKeeperStatistics().incrByKills(1);
                                 }
                                 catch (Exception ignored){}
                             });
@@ -253,7 +253,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
 
                     try
                     {
-                        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> SamaGamesAPI.get().getStatsManager().getPlayerStats(player.getUniqueId()).getUHCRunStatistics().incrByDeaths(1));
+                        SamaGamesAPI.get().getStatsManager().getPlayerStats(player.getUniqueId()).getUltraFlagKeeperStatistics().incrByDeaths(1);
                     }
                     catch (Exception ignored) {}
 
