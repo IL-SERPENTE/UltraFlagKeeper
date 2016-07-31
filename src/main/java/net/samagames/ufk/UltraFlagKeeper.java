@@ -2,6 +2,7 @@ package net.samagames.ufk;
 
 import com.google.gson.JsonPrimitive;
 import net.samagames.api.SamaGamesAPI;
+import net.samagames.api.games.GamesNames;
 import net.samagames.survivalapi.SurvivalAPI;
 import net.samagames.survivalapi.modules.block.RandomChestModule;
 import net.samagames.survivalapi.modules.block.RapidOresModule;
@@ -71,6 +72,7 @@ public class UltraFlagKeeper extends JavaPlugin
         this.game = new UFKGame(this, nb);
         SurvivalAPI.get().unloadModule(RandomChestModule.class);
 
+        SamaGamesAPI.get().getStatsManager().setStatsToLoad(GamesNames.ULTRAFLAGKEEPER, true);
         SamaGamesAPI.get().getGameManager().setMaxReconnectTime(10);
         SamaGamesAPI.get().getGameManager().setGameStatisticsHelper(new UFKStatisticsHelper());
         SamaGamesAPI.get().getGameManager().registerGame(this.game);
