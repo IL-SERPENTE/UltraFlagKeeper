@@ -25,6 +25,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -121,7 +122,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
             Player player;
             if (flag.getWearer() == null || (player = this.plugin.getServer().getPlayer(flag.getWearer())) == null)
                 return ;
-            player.getWorld().spawnParticle(Particle.CRIT, player.getLocation().add(0D, 1D, 0D), 3, 0.3D, 1D, 0.3D, 0.1D);
+            player.getWorld().spawnParticle(Particle.BLOCK_CRACK, player.getLocation().add(0D, 1D, 0D), 3, 0.3D, 1D, 0.3D, 0.1D, new MaterialData(Material.WOOL, flag.getColor()));
 
         }), 1L, 1L);
     }
