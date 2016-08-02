@@ -66,6 +66,7 @@ public class RespawnManager implements Listener
         player.setWalkSpeed(0.2F);
         if (task.amplifier != 0)
             player.addPotionEffect(PotionEffectType.JUMP.createEffect(task.duration, task.amplifier));
+        this.plugin.getLogger().info("DEBUG: " + task.amplifier);
         RespawnManager.this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player).getHandle())));
         this.players.remove(player.getUniqueId());
     }
