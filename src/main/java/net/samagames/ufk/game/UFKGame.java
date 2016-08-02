@@ -170,6 +170,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
 
                             ((BukkitTask) player.getMetadata("lastDamagerKeeping").get(0).value()).cancel();
                             player.removeMetadata("lastDamagerKeeping", this.plugin);
+                            player.removeMetadata("lastDamagerKeepingValue", this.plugin);
                         }
                     }
 
