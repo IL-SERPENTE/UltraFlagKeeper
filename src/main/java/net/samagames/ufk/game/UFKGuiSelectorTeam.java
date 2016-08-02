@@ -22,26 +22,26 @@ public class UFKGuiSelectorTeam extends GuiSelectTeam
 
         int last = 10;
 
-        for (SurvivalTeam team : game.getTeams())
+        for (SurvivalTeam team : UFKGuiSelectorTeam.game.getTeams())
         {
-            String name = team.getChatColor() + "Equipe " + team.getTeamName() + " [" + team.getPlayersUUID().size() + "/" + game.getPersonsPerTeam() + "]";
-            ArrayList<String> lores = new ArrayList<>();
+            String name = team.getChatColor() + "Equipe " + team.getTeamName() + " [" + team.getPlayersUUID().size() + "/" + UFKGuiSelectorTeam.game.getPersonsPerTeam() + "]";
+            ArrayList<String> lore = new ArrayList<>();
 
             if (team.isLocked())
             {
-                lores.add(ChatColor.RED + "L'équipe est fermée !");
-                lores.add("");
+                lore.add(ChatColor.RED + "L'équipe est fermée !");
+                lore.add("");
             }
 
             for (UUID uuid : team.getPlayersUUID().keySet())
             {
-                if (game.getPlugin().getServer().getPlayer(uuid) != null)
-                    lores.add(team.getChatColor() + " - " + Bukkit.getPlayer(uuid).getName());
+                if (UFKGuiSelectorTeam.game.getPlugin().getServer().getPlayer(uuid) != null)
+                    lore.add(team.getChatColor() + " - " + Bukkit.getPlayer(uuid).getName());
                 else
                     team.removePlayer(uuid);
             }
 
-            this.setSlotData(name, team.getIcon(), last, lores.toArray(new String[lores.size()]), "team_" + team.getChatColor());
+            this.setSlotData(name, team.getIcon(), last, lore.toArray(new String[lore.size()]), "team_" + team.getChatColor());
 
             if (last == 16)
                 last = 19;
@@ -51,16 +51,16 @@ public class UFKGuiSelectorTeam extends GuiSelectTeam
 
         this.setSlotData("Sortir de l'équipe", Material.ARROW, 31, null, "leave");
 
-        String[] lores = new String[]{ChatColor.GREEN + "Réservé aux VIP :)"};
+        String[] lore = new String[]{ChatColor.GREEN + "Réservé aux VIP :)"};
 
-        this.setSlotData("Changer le nom de l'équipe", Material.BOOK_AND_QUILL, 39, lores, "teamname");
-        this.setSlotData("Inviter un joueur", Material.FEATHER, 41, lores, "invit");
+        this.setSlotData("Changer le nom de l'équipe", Material.BOOK_AND_QUILL, 39, lore, "teamname");
+        this.setSlotData("Inviter un joueur", Material.FEATHER, 41, lore, "invit");
 
         player.openInventory(this.inventory);
     }
 
     public static void setGame(SurvivalTeamGame instance)
     {
-        game = instance;
+        UFKGuiSelectorTeam.game = instance;
     }
 }

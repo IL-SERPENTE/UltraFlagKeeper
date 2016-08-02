@@ -366,5 +366,5 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
         if (this.hasPlayer(event.getEntity()) && !this.isSpectator(event.getEntity()))
             event.getDrops().add(new ItemStack(Material.COOKED_BEEF, 2));
     }
-    //TODO Fix teleports
+    //TODO Fix teams
 }

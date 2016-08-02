@@ -27,15 +27,15 @@ public class UFKStatisticsTemplate
     public List<String> prepare(UFKGame game)
     {
         List<SurvivalPlayer> killers = new ArrayList<>(new HashMap<>(game.getRegisteredGamePlayers()).values());
-        List<SurvivalPlayer> damagers = new ArrayList<>(new HashMap<>(game.getRegisteredGamePlayers()).values());
+        List<SurvivalPlayer> damagerList = new ArrayList<>(new HashMap<>(game.getRegisteredGamePlayers()).values());
         List<MutablePair<UUID, Integer>> captures = getCaptures(game);
 
         Collections.sort(killers, (o1, o2) -> Integer.compare(o1.getKills().size(), o2.getKills().size()));
-        Collections.sort(damagers, (o1, o2) -> Double.compare(o1.getDamageReporter().getTotalPlayerDamages(), o2.getDamageReporter().getTotalPlayerDamages()));
+        Collections.sort(damagerList, (o1, o2) -> Double.compare(o1.getDamageReporter().getTotalPlayerDamages(), o2.getDamageReporter().getTotalPlayerDamages()));
         Collections.sort(captures, ((o1, o2) -> Integer.compare(o1.getValue(), o2.getValue())));
 
         Collections.reverse(killers);
-        Collections.reverse(damagers);
+        Collections.reverse(damagerList);
         Collections.reverse(captures);
 
         List<String> finalLines = new ArrayList<>();
@@ -58,14 +58,14 @@ public class UFKStatisticsTemplate
         finalLines.add(ChatUtils.getCenteredText(ChatColor.WHITE + "★ Classement des dégats ★"));
         finalLines.add("");
 
-        if (damagers.size() > 0)
-            finalLines.add(ChatUtils.getCenteredText(ChatColor.GREEN + "1er" + ChatColor.GRAY + " - " + ChatColor.RESET + PlayerUtils.getFullyFormattedPlayerName(damagers.get(0).getUUID()) + ChatColor.GRAY + " (" + damagers.get(0).getDamageReporter().getTotalPlayerDamages() + ")"));
+        if (damagerList.size() > 0)
+            finalLines.add(ChatUtils.getCenteredText(ChatColor.GREEN + "1er" + ChatColor.GRAY + " - " + ChatColor.RESET + PlayerUtils.getFullyFormattedPlayerName(damagerList.get(0).getUUID()) + ChatColor.GRAY + " (" + damagerList.get(0).getDamageReporter().getTotalPlayerDamages() + ")"));
         else
             finalLines.add(ChatUtils.getCenteredText(ChatColor.RED + "Aucun dégat"));
-        if(damagers.size() > 1)
-            finalLines.add(ChatUtils.getCenteredText(ChatColor.YELLOW + "2e" + ChatColor.GRAY + " - " + ChatColor.RESET + PlayerUtils.getFullyFormattedPlayerName(damagers.get(1).getUUID()) + ChatColor.GRAY + " (" + damagers.get(1).getDamageReporter().getTotalPlayerDamages() + ")"));
-        if(damagers.size() > 2)
-            finalLines.add(ChatUtils.getCenteredText(ChatColor.RED + "3e" + ChatColor.GRAY + " - " + ChatColor.RESET + PlayerUtils.getFullyFormattedPlayerName(damagers.get(2).getUUID()) + ChatColor.GRAY + " (" + damagers.get(2).getDamageReporter().getTotalPlayerDamages() + ")"));
+        if(damagerList.size() > 1)
+            finalLines.add(ChatUtils.getCenteredText(ChatColor.YELLOW + "2e" + ChatColor.GRAY + " - " + ChatColor.RESET + PlayerUtils.getFullyFormattedPlayerName(damagerList.get(1).getUUID()) + ChatColor.GRAY + " (" + damagerList.get(1).getDamageReporter().getTotalPlayerDamages() + ")"));
+        if(damagerList.size() > 2)
+            finalLines.add(ChatUtils.getCenteredText(ChatColor.RED + "3e" + ChatColor.GRAY + " - " + ChatColor.RESET + PlayerUtils.getFullyFormattedPlayerName(damagerList.get(2).getUUID()) + ChatColor.GRAY + " (" + damagerList.get(2).getDamageReporter().getTotalPlayerDamages() + ")"));
 
         finalLines.add("");
         finalLines.add("");

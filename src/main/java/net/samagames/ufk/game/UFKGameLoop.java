@@ -168,10 +168,10 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
     {
         if (event.getRecipe().getResult().getType() == Material.DIAMOND_PICKAXE)
         {
-            ItemStack pickaxe = new ItemStack(Material.DIAMOND_PICKAXE, 1);
-            pickaxe.addEnchantment(Enchantment.DIG_SPEED, 3);
+            ItemStack pick = new ItemStack(Material.DIAMOND_PICKAXE, 1);
+            pick.addEnchantment(Enchantment.DIG_SPEED, 3);
 
-            event.getInventory().setResult(pickaxe);
+            event.getInventory().setResult(pick);
 
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
             {

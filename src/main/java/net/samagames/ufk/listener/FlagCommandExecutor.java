@@ -2,9 +2,7 @@ package net.samagames.ufk.listener;
 
 import net.samagames.survivalapi.game.SurvivalPlayer;
 import net.samagames.survivalapi.game.SurvivalTeam;
-import net.samagames.tools.Titles;
 import net.samagames.ufk.UltraFlagKeeper;
-import net.samagames.ufk.game.Flag;
 import net.samagames.ufk.game.UFKTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

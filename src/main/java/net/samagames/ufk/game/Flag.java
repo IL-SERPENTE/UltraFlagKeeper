@@ -16,6 +16,8 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ import java.util.function.Consumer;
  */
 public class Flag implements Listener
 {
+    private static final String OLD_STUFF_KEY = "old_stuff";
+    
     private UltraFlagKeeper plugin;
     private Location location;
     private List<Vector> temporaryLocations;
@@ -36,6 +40,7 @@ public class Flag implements Listener
     private UFKTeam team;
     private List<UUID> captures;
     private List<ArmorStand> armorStands;
+    private BukkitTask effectTask;
 
     public Flag(UltraFlagKeeper plugin, Location location, byte color)
     {
@@ -48,6 +53,7 @@ public class Flag implements Listener
         this.temporaryLocations = new ArrayList<>();
         this.color = color;
         this.team = null;
+        this.effectTask = null;
         this.captures = new ArrayList<>();
         this.armorStands = new ArrayList<>();
         this.plugin = plugin;
@@ -150,9 +156,15 @@ public class Flag implements Listener
             Player player = this.plugin.getServer().getPlayer(this.wearer);
             if (player != null)
             {
-                player.getInventory().setHelmet(player.hasMetadata("oldstuff") ? (ItemStack) player.getMetadata("oldstuff").get(0).value() : new ItemStack(Material.AIR));
-                player.removeMetadata("oldstuff", this.plugin);
+                player.getInventory().setHelmet(player.hasMetadata(OLD_STUFF_KEY) ? (ItemStack) player.getMetadata(OLD_STUFF_KEY).get(0).value() : new ItemStack(Material.AIR));
+                player.removeMetadata(OLD_STUFF_KEY, this.plugin);
+                player.removePotionEffect(PotionEffectType.WEAKNESS);
+                player.removePotionEffect(PotionEffectType.SLOW);
+                player.removePotionEffect(PotionEffectType.WITHER);
             }
+            if (this.effectTask != null)
+                this.effectTask.cancel();
+            this.effectTask = null;
         }
         this.wearer = wearer;
         if (this.wearer != null)
@@ -167,7 +179,19 @@ public class Flag implements Listener
                 ItemStack save = player.getInventory().getHelmet();
                 player.getInventory().setHelmet(itemStack);
                 if (save != null)
-                    player.setMetadata("oldstuff", new FixedMetadataValue(this.plugin, save));
+                    player.setMetadata(OLD_STUFF_KEY, new FixedMetadataValue(this.plugin, save));
+                this.effectTask = this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
+                {
+                    player.sendMessage(ChatColor.RED + "Vous portez le drapeau depuis trop longtemps. Son poids vous fatigue et vous devenez plus faible.");
+                    player.addPotionEffect(PotionEffectType.WEAKNESS.createEffect(Integer.MAX_VALUE, 1));
+                    player.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 1));
+                    this.effectTask = this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
+                    {
+                        player.sendMessage(ChatColor.RED + "Vous croulez sous le poids du drapeau. Vous prenez maintenant du dégat.");
+                        player.addPotionEffect(PotionEffectType.WITHER.createEffect(Integer.MAX_VALUE, 1));
+                        this.effectTask = null;
+                    }, 800L);
+                }, 1000L);
             }
         }
     }
