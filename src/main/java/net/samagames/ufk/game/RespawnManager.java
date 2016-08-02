@@ -1,7 +1,9 @@
 package net.samagames.ufk.game;
 
+import net.minecraft.server.v1_9_R2.MobEffectList;
 import net.minecraft.server.v1_9_R2.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_9_R2.PacketPlayOutNamedEntitySpawn;
+import net.minecraft.server.v1_9_R2.PacketPlayOutRemoveEntityEffect;
 import net.samagames.tools.Titles;
 import net.samagames.ufk.UltraFlagKeeper;
 import org.bukkit.ChatColor;
@@ -56,6 +58,7 @@ public class RespawnManager implements Listener
         this.players.put(player.getUniqueId(), task);
     }
 
+    @SuppressWarnings("deprecation")
     private void unstuck(Player player)
     {
         BukkitTask task = this.players.get(player.getUniqueId());
@@ -63,9 +66,11 @@ public class RespawnManager implements Listener
             return ;
         task.cancel();
         player.removePotionEffect(PotionEffectType.JUMP);
+        player.setFireTicks(0);
         player.setWalkSpeed(0.2F);
         player.getActivePotionEffects().forEach(potionEffect -> this.plugin.getLogger().info("DEBUG : " + potionEffect.getType() + " " + potionEffect.getAmplifier() + " " + potionEffect.getDuration()));
-        RespawnManager.this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player).getHandle())));
+        this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player).getHandle())));
+        this.plugin.getServer().getOnlinePlayers().forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutRemoveEntityEffect(player.getEntityId(), MobEffectList.fromId(PotionEffectType.JUMP.getId())));
         this.players.remove(player.getUniqueId());
     }
 
