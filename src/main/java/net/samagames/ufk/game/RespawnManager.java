@@ -35,7 +35,7 @@ public class RespawnManager implements Listener
         player.setFireTicks(0);
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.setFireTicks(0), 1L);
         player.getActivePotionEffects().forEach(potionEffect -> this.plugin.getLogger().info("DEBUG : " + potionEffect.getType() + " " + potionEffect.getAmplifier() + " " + potionEffect.getDuration()));
-        player.addPotionEffect(PotionEffectType.JUMP.createEffect(Integer.MAX_VALUE, 128));
+        player.addPotionEffect(PotionEffectType.JUMP.createEffect(200, 128));
         this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(((CraftPlayer)player).getHandle().getId())));
         BukkitTask task = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new Runnable()
         {
@@ -64,7 +64,6 @@ public class RespawnManager implements Listener
         task.cancel();
         this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player).getHandle())));
         player.removePotionEffect(PotionEffectType.JUMP);
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.removePotionEffect(PotionEffectType.JUMP), 1L);
         player.setFireTicks(0);
         player.setWalkSpeed(0.2F);
         player.getActivePotionEffects().forEach(potionEffect -> this.plugin.getLogger().info("DEBUG : " + potionEffect.getType() + " " + potionEffect.getAmplifier() + " " + potionEffect.getDuration()));
