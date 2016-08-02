@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -20,7 +19,7 @@ import java.util.*;
 public class RespawnManager implements Listener
 {
     private UltraFlagKeeper plugin;
-    private Map<UUID, RespawnTask> players;
+    private Map<UUID, BukkitTask> players;
 
     public RespawnManager(UltraFlagKeeper plugin)
     {
@@ -31,10 +30,10 @@ public class RespawnManager implements Listener
 
     public void respawn(Player player)
     {
-        PotionEffect jump = player.getActivePotionEffects().stream().filter(potionEffect -> potionEffect.getType() == PotionEffectType.JUMP).findFirst().orElse(null);
         player.setWalkSpeed(0F);
         player.removePotionEffect(PotionEffectType.JUMP);
         player.setFireTicks(0);
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.setFireTicks(0), 1L);
         player.getActivePotionEffects().forEach(potionEffect -> this.plugin.getLogger().info("DEBUG : " + potionEffect.getType() + " " + potionEffect.getAmplifier() + " " + potionEffect.getDuration()));
         player.addPotionEffect(PotionEffectType.JUMP.createEffect(Integer.MAX_VALUE, 128));
         this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(((CraftPlayer)player).getHandle().getId())));
@@ -54,19 +53,17 @@ public class RespawnManager implements Listener
                 Titles.sendTitle(player, 1, 18, 1, "", ChatColor.GOLD + String.valueOf(10 - this.time));
             }
         }, 20L, 20L);
-        this.players.put(player.getUniqueId(), new RespawnTask(jump == null ? 0 : jump.getDuration(), jump == null ? 0 : jump.getAmplifier(), task));
+        this.players.put(player.getUniqueId(), task);
     }
 
     private void unstuck(Player player)
     {
-        RespawnTask task = this.players.get(player.getUniqueId());
+        BukkitTask task = this.players.get(player.getUniqueId());
         if (task == null)
             return ;
-        task.task.cancel();
+        task.cancel();
         player.removePotionEffect(PotionEffectType.JUMP);
         player.setWalkSpeed(0.2F);
-        if (task.amplifier != 0)
-            player.addPotionEffect(PotionEffectType.JUMP.createEffect(task.duration, task.amplifier));
         player.getActivePotionEffects().forEach(potionEffect -> this.plugin.getLogger().info("DEBUG : " + potionEffect.getType() + " " + potionEffect.getAmplifier() + " " + potionEffect.getDuration()));
         RespawnManager.this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player).getHandle())));
         this.players.remove(player.getUniqueId());
@@ -74,7 +71,7 @@ public class RespawnManager implements Listener
 
     public void cancelAll()
     {
-        Map<UUID, RespawnTask> tmp = new HashMap<>(this.players);
+        Map<UUID, BukkitTask> tmp = new HashMap<>(this.players);
         tmp.forEach((uuid, respawnTask) ->
         {
             Player player = this.plugin.getServer().getPlayer(uuid);
@@ -100,20 +97,6 @@ public class RespawnManager implements Listener
         {
             event.setCancelled(true);
             event.setDamage(0D);
-        }
-    }
-
-    private class RespawnTask
-    {
-        private int duration;
-        private int amplifier;
-        private BukkitTask task;
-
-        private RespawnTask(int duration, int amplifier, BukkitTask task)
-        {
-            this.duration = duration;
-            this.amplifier = amplifier;
-            this.task = task;
         }
     }
 }
