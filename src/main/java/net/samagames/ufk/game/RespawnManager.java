@@ -4,7 +4,9 @@ import net.minecraft.server.v1_9_R2.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_9_R2.PacketPlayOutNamedEntitySpawn;
 import net.samagames.tools.Titles;
 import net.samagames.ufk.UltraFlagKeeper;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,7 +21,7 @@ import java.util.*;
 public class RespawnManager implements Listener
 {
     private UltraFlagKeeper plugin;
-    private Map<UUID, BukkitTask> players;
+    private Map<UUID, Pair<BukkitTask, Location>> players;
 
     public RespawnManager(UltraFlagKeeper plugin)
     {
@@ -30,7 +32,6 @@ public class RespawnManager implements Listener
 
     public void respawn(Player player)
     {
-        player.setWalkSpeed(0F);
         player.setFireTicks(0);
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.setFireTicks(0), 1L);
         this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(((CraftPlayer)player).getHandle().getId())));
@@ -55,15 +56,15 @@ public class RespawnManager implements Listener
                 Titles.sendTitle(player, 1, 18, 1, "", ChatColor.GOLD + String.valueOf(10 - this.time));
             }
         }, 20L, 20L);
-        this.players.put(player.getUniqueId(), task);
+        this.players.put(player.getUniqueId(), Pair.of(task, player.getLocation()));
     }
 
     private void unstuck(Player player)
     {
-        BukkitTask task = this.players.get(player.getUniqueId());
+        Pair<BukkitTask, Location> task = this.players.get(player.getUniqueId());
         if (task == null)
             return ;
-        task.cancel();
+        task.getKey().cancel();
         this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player).getHandle())));
         player.setFireTicks(0);
 
@@ -76,7 +77,7 @@ public class RespawnManager implements Listener
 
     public void cancelAll()
     {
-        Map<UUID, BukkitTask> tmp = new HashMap<>(this.players);
+        Map<UUID, Pair<BukkitTask, Location>> tmp = new HashMap<>(this.players);
         tmp.forEach((uuid, respawnTask) ->
         {
             Player player = this.plugin.getServer().getPlayer(uuid);
@@ -112,6 +113,7 @@ public class RespawnManager implements Listener
         {
             event.setCancelled(true);
             event.getPlayer().setFlying(true);
+            event.getPlayer().teleport(this.players.get(event.getPlayer().getUniqueId()).getValue());
         }
     }
 }
