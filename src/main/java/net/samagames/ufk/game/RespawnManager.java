@@ -35,7 +35,7 @@ public class RespawnManager implements Listener
         player.setFireTicks(0);
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.setFireTicks(0), 1L);
         player.getActivePotionEffects().forEach(potionEffect -> this.plugin.getLogger().info("DEBUG : " + potionEffect.getType() + " " + potionEffect.getAmplifier() + " " + potionEffect.getDuration()));
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.addPotionEffect(PotionEffectType.JUMP.createEffect(200, 128)), 9L);
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.addPotionEffect(PotionEffectType.JUMP.createEffect(200, 128), true), 9L);
         this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(((CraftPlayer)player).getHandle().getId())));
         BukkitTask task = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new Runnable()
         {
