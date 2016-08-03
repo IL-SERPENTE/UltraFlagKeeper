@@ -183,12 +183,12 @@ public class Flag implements Listener
                 this.effectTask = this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
                 {
                     player.sendMessage(ChatColor.RED + "Vous portez le drapeau depuis trop longtemps. Son poids vous fatigue et vous devenez plus faible.");
-                    player.addPotionEffect(PotionEffectType.WEAKNESS.createEffect(Integer.MAX_VALUE, 1));
-                    player.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 1));
+                    player.addPotionEffect(PotionEffectType.WEAKNESS.createEffect(18000, 0));
+                    player.addPotionEffect(PotionEffectType.SLOW.createEffect(18000, 0));
                     this.effectTask = this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
                     {
                         player.sendMessage(ChatColor.RED + "Vous croulez sous le poids du drapeau. Vous prenez maintenant du dégat.");
-                        player.addPotionEffect(PotionEffectType.WITHER.createEffect(Integer.MAX_VALUE, 1));
+                        player.addPotionEffect(PotionEffectType.WITHER.createEffect(18000, 1));
                         this.effectTask = null;
                     }, 800L);
                 }, 1000L);
