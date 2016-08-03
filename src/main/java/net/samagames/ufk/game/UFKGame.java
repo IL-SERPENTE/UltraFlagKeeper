@@ -53,6 +53,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
         this.teams.forEach(team -> SurvivalAPI.get().registerEvent(SurvivalAPI.EventType.WORLDLOADED, () -> team.getScoreboardTeam().unregister()));
         this.teams.clear();
         this.respawn = true;
+        this.teamBalancing = true;
         List<SurvivalTeam> temporaryTeams = new ArrayList<>();
         temporaryTeams.add(new UFKTeam(this, "Rouge", DyeColor.RED, ChatColor.RED));
         temporaryTeams.add(new UFKTeam(this, "Bleu Foncé", DyeColor.BLUE, ChatColor.DARK_BLUE));
