@@ -11,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
@@ -31,12 +31,14 @@ public class RespawnManager implements Listener
     public void respawn(Player player)
     {
         player.setWalkSpeed(0F);
-        player.removePotionEffect(PotionEffectType.JUMP);
         player.setFireTicks(0);
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.setFireTicks(0), 1L);
-        player.getActivePotionEffects().forEach(potionEffect -> this.plugin.getLogger().info("DEBUG : " + potionEffect.getType() + " " + potionEffect.getAmplifier() + " " + potionEffect.getDuration()));
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.addPotionEffect(PotionEffectType.JUMP.createEffect(200, 128), true), 9L);
         this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(((CraftPlayer)player).getHandle().getId())));
+
+        player.setAllowFlight(true);
+        player.setFlying(true);
+        player.setFlySpeed(0F);
+
         BukkitTask task = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new Runnable()
         {
             private int time = 1;
@@ -63,10 +65,12 @@ public class RespawnManager implements Listener
             return ;
         task.cancel();
         this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player).getHandle())));
-        player.removePotionEffect(PotionEffectType.JUMP);
         player.setFireTicks(0);
-        player.setWalkSpeed(0.2F);
-        player.getActivePotionEffects().forEach(potionEffect -> this.plugin.getLogger().info("DEBUG : " + potionEffect.getType() + " " + potionEffect.getAmplifier() + " " + potionEffect.getDuration()));
+
+        player.setFlying(false);
+        player.setAllowFlight(false);
+        player.setFlySpeed(0.2F);
+
         this.players.remove(player.getUniqueId());
     }
 
@@ -98,6 +102,16 @@ public class RespawnManager implements Listener
         {
             event.setCancelled(true);
             event.setDamage(0D);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onFly(PlayerToggleFlightEvent event)
+    {
+        if (!event.isFlying() && this.players.containsKey(event.getPlayer().getUniqueId()))
+        {
+            event.setCancelled(true);
+            event.getPlayer().setFlying(true);
         }
     }
 }
