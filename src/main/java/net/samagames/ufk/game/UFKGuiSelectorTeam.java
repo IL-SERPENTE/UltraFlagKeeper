@@ -1,15 +1,25 @@
 package net.samagames.ufk.game;
 
+import net.samagames.api.SamaGamesAPI;
 import net.samagames.survivalapi.game.SurvivalTeam;
 import net.samagames.survivalapi.game.types.SurvivalTeamGame;
 import net.samagames.survivalapi.game.types.team.GuiSelectTeam;
+import net.samagames.survivalapi.game.types.team.SurvivalTeamSelector;
+import net.samagames.tools.chat.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class UFKGuiSelectorTeam extends GuiSelectTeam
 {
@@ -57,6 +67,44 @@ public class UFKGuiSelectorTeam extends GuiSelectTeam
         this.setSlotData("Inviter un joueur", Material.FEATHER, 41, lore, "invit");
 
         player.openInventory(this.inventory);
+    }
+
+    @Override
+    public void onClick(final Player player, ItemStack stack, String action)
+    {
+        if (action.startsWith("team_"))
+        {
+            for (SurvivalTeam team : game.getTeams())
+            {
+                if (action.equals("team_" + team.getChatColor()))
+                {
+                    if (!team.isLocked())
+                    {
+                        if (team.canJoin())
+                        {
+                            if (game.getPlayerTeam(player.getUniqueId()) != null)
+                                game.getPlayerTeam(player.getUniqueId()).removePlayer(player.getUniqueId());
+
+                            team.join(player.getUniqueId());
+                            player.sendMessage(game.getCoherenceMachine().getGameTag() + " " + ChatColor.YELLOW + "Vous êtes entré dans l'équipe " + team.getChatColor() + team.getTeamName() + ChatColor.YELLOW + " !");
+                        }
+                        else
+                        {
+                            player.sendMessage(game.getCoherenceMachine().getGameTag() + " " + ChatColor.RED + "L'équipe choisie est pleine.");
+                        }
+                    }
+                    else
+                    {
+                        player.sendMessage(game.getCoherenceMachine().getGameTag() + " " + ChatColor.RED + "L'équipe choisie est fermée !");
+                    }
+
+                    break;
+                }
+            }
+            SurvivalTeamSelector.getInstance().openGui(player, new UFKGuiSelectorTeam());
+        }
+        else
+            super.onClick(player, stack, action);
     }
 
     public static void setGame(SurvivalTeamGame instance)
