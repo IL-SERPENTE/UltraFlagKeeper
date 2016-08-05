@@ -56,7 +56,8 @@ public class RespawnManager implements Listener
                 Titles.sendTitle(player, 1, 18, 1, "", ChatColor.GOLD + String.valueOf(10 - this.time));
             }
         }, 20L, 20L);
-        this.players.put(player.getUniqueId(), Pair.of(task, player.getLocation()));
+
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.players.put(player.getUniqueId(), Pair.of(task, player.getLocation())), 1L);
     }
 
     private void unstuck(Player player)
