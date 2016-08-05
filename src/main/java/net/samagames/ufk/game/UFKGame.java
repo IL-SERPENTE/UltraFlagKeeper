@@ -339,7 +339,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
     public UFKTeam getWinnerTeam()
     {
         List<SurvivalTeam> teams = new ArrayList<>(this.teams);
-        Collections.sort(teams, ((o1, o2) -> ((UFKTeam)o1).getScore() - ((UFKTeam)o2).getScore()));
+        Collections.sort(teams, ((o1, o2) -> ((UFKTeam)o2).getScore() - ((UFKTeam)o1).getScore()));
         if (teams.size() == 0 || (teams.size() > 1 && ((UFKTeam)teams.get(0)).getScore() == ((UFKTeam)teams.get(1)).getScore()))
             return null;
         return (UFKTeam)teams.get(0);
@@ -368,5 +368,4 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
         if (this.hasPlayer(event.getEntity()) && !this.isSpectator(event.getEntity()))
             event.getDrops().add(new ItemStack(Material.COOKED_BEEF, 2));
     }
-    //TODO Fix teams
 }
