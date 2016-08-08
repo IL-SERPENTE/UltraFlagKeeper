@@ -95,7 +95,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
                 }
             }
 
-            this.game.setWorldBorderSize(249.0D);
+            this.game.setWorldBorderSize(251.0D);
             this.game.getCoherenceMachine().getMessageManager().writeCustomMessage("La map est désormais réduite. Les bordures sont en coordonnées " + ChatColor.RED + "-125 +125" + ChatColor.RESET + ".", true);
             this.game.getCoherenceMachine().getMessageManager().writeCustomMessage("Les dégats et le PvP seront activés dans 10 secondes !", true);
             this.createDeathmatchEvent();
@@ -126,6 +126,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
             ((UFKGame)this.game).respawnManager.cancelAll();
             if (team == null)
             {
+                this.game.setWorldBorderSize(129.0D);
                 ((UFKGame) this.game).teleportDeathMatch();
                 this.game.getCoherenceMachine().getMessageManager().writeCustomMessage("Aucune équipe gagnante. Vous êtes donc téléportés pour un match à mort final.", true);
 

@@ -30,6 +30,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -292,7 +293,8 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
                         Titles.sendTitle(player, 0, 20, 5, ChatColor.RED + "✞", ChatColor.RED + "Vous êtes mort !");
                         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.teleport(finalSpawn), 1L);
                         player.setHealth(20.0D);
-                        this.respawnManager.respawn(player);
+                        player.setVelocity(new Vector().zero());
+                        this.respawnManager.respawn(player, spawn);
                     }
                 }
                 else

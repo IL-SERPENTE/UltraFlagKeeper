@@ -1,13 +1,10 @@
 package net.samagames.ufk.game;
 
-import net.minecraft.server.v1_9_R2.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_9_R2.PacketPlayOutNamedEntitySpawn;
 import net.samagames.tools.Titles;
 import net.samagames.ufk.UltraFlagKeeper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,11 +27,11 @@ class RespawnManager implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    void respawn(Player player)
+    void respawn(Player player, Location location)
     {
         player.setFireTicks(0);
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.setFireTicks(0), 1L);
-        this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(((CraftPlayer)player).getHandle().getId())));
+        this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> bPlayer.hidePlayer(player));
 
         player.setAllowFlight(true);
         player.setFlying(true);
@@ -57,7 +54,7 @@ class RespawnManager implements Listener
             }
         }, 20L, 20L);
 
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.players.put(player.getUniqueId(), Pair.of(task, player.getLocation())), 1L);
+        this.players.put(player.getUniqueId(), Pair.of(task, location));
     }
 
     private void unstuck(Player player)
@@ -66,7 +63,7 @@ class RespawnManager implements Listener
         if (task == null)
             return ;
         task.getKey().cancel();
-        this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> ((CraftPlayer)bPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player).getHandle())));
+        this.plugin.getServer().getOnlinePlayers().stream().filter(bPlayer -> bPlayer.getEntityId() != player.getEntityId()).forEach(bPlayer -> bPlayer.showPlayer(player));
         player.setFireTicks(0);
 
         player.setFlying(false);

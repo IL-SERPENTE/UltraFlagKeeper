@@ -48,6 +48,7 @@ public class FlagCommandExecutor implements CommandExecutor
         }
         while (i < 30 && (spawn.getBlock().getType() == Material.AIR || spawn.getBlock().getRelative(BlockFace.UP).getType() == Material.AIR));
         final Location finalSpawn = spawn;
+        ((Player)commandSender).setNoDamageTicks(10);
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> ((Player)commandSender).teleport(finalSpawn), 1L);
         return true;
     }
