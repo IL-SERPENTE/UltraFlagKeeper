@@ -41,7 +41,7 @@ import java.util.UUID;
 public class UFKGameLoop extends RunBasedGameLoop implements Listener
 {
     private boolean fallDamages;
-    protected boolean flagCommandEnabled;
+    private boolean flagCommandEnabled;
 
     public UFKGameLoop(JavaPlugin plugin, Server server, SurvivalGame game)
     {
@@ -116,7 +116,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
         });
     }
 
-    public void createFinalDeathmatchEvent()
+    private void createFinalDeathmatchEvent()
     {
         this.fallDamages = true;
 

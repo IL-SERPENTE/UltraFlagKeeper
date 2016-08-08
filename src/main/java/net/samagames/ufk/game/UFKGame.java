@@ -43,7 +43,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
 {
     private List<Flag> flags;
     private boolean respawn;
-    private RespawnManager respawnManager;
+    RespawnManager respawnManager;
 
     public UFKGame(UltraFlagKeeper plugin, int nb)
     {
