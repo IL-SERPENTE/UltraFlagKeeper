@@ -1,27 +1,19 @@
 package net.samagames.ufk.game;
 
-import net.samagames.api.SamaGamesAPI;
 import net.samagames.survivalapi.game.SurvivalTeam;
 import net.samagames.survivalapi.game.types.SurvivalTeamGame;
 import net.samagames.survivalapi.game.types.team.GuiSelectTeam;
 import net.samagames.survivalapi.game.types.team.SurvivalTeamSelector;
-import net.samagames.tools.chat.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.UUID;
-import java.util.logging.Level;
 
-public class UFKGuiSelectorTeam extends GuiSelectTeam
+class UFKGuiSelectorTeam extends GuiSelectTeam
 {
     private static SurvivalTeamGame game;
 

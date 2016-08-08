@@ -15,7 +15,7 @@ import java.util.*;
  * Copyright (c) for SamaGames
  * All right reserved
  */
-public class UFKStatisticsTemplate
+class UFKStatisticsTemplate
 {
     /**
      * Prepare the message with the team's members
@@ -24,7 +24,7 @@ public class UFKStatisticsTemplate
      *
      * @return A list of lines
      */
-    public List<String> prepare(UFKGame game)
+    private List<String> prepare(UFKGame game)
     {
         List<SurvivalPlayer> killers = new ArrayList<>(new HashMap<>(game.getRegisteredGamePlayers()).values());
         List<SurvivalPlayer> damagerList = new ArrayList<>(new HashMap<>(game.getRegisteredGamePlayers()).values());
@@ -112,7 +112,7 @@ public class UFKStatisticsTemplate
      *
      * @param game The game
      */
-    public void execute(UFKGame game)
+    void execute(UFKGame game)
     {
         new BasicMessageTemplate().execute(this.prepare(game));
     }

@@ -41,15 +41,15 @@ import java.util.stream.Collectors;
  */
 public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
 {
-    protected List<Flag> flags;
-    protected boolean respawn;
-    protected RespawnManager respawnManager;
+    private List<Flag> flags;
+    private boolean respawn;
+    private RespawnManager respawnManager;
 
     public UFKGame(UltraFlagKeeper plugin, int nb)
     {
         super(plugin, "ultraflagkeeper", "Run4Flag", "Cours, drapeau, cours !", "⚑", UFKGameLoop.class, nb);
 
-        /** Reimplement team creation, to change order */
+        /* Reimplement team creation, to change order */
         this.teams.forEach(team -> SurvivalAPI.get().registerEvent(SurvivalAPI.EventType.WORLDLOADED, () -> team.getScoreboardTeam().unregister()));
         this.teams.clear();
         this.respawn = true;
@@ -149,7 +149,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
             {
                 if (!logout)
                 {
-                    final Player player = Bukkit.getPlayer(playerUUID);
+                    final Player player = this.plugin.getServer().getPlayer(playerUUID);
                     MetadataValue lastDamager = player.hasMetadata("lastDamager") ? player.getMetadata("lastDamager").get(0) : null;
                     Player killer = null;
 
@@ -181,7 +181,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
                         {
                             final Player finalKiller = killer;
 
-                            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () ->
+                            this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () ->
                             {
                                 SurvivalPlayer gamePlayer = this.getPlayer(finalKiller.getUniqueId());
                                 gamePlayer.addKill(player.getUniqueId());
@@ -295,7 +295,18 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
                         this.respawnManager.respawn(player);
                     }
                 }
-                if (!this.respawn)
+                else
+                {
+                    final Player player = this.plugin.getServer().getPlayer(playerUUID);
+                    Flag flag = this.flags.stream().filter(f -> f.getWearer() != null && f.getWearer().equals(playerUUID)).findFirst().orElse(null);
+                    if (flag != null)
+                    {
+                        this.coherenceMachine.getMessageManager().writeCustomMessage(ChatColor.YELLOW + "Le drapeau de l'équipe " + flag.getTeam().getChatColor() + flag.getTeam().getTeamName() + ChatColor.YELLOW + " est au sol.", true);
+                        flag.drop(player.getLocation());
+                        flag.setWearer(null);
+                    }
+                }
+                if (logout || !this.respawn)
                 {
                     this.plugin.getLogger().info("Stumping player " + playerUUID.toString() + "...");
                     this.checkStump(playerUUID, silent);
@@ -336,7 +347,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
         new UFKStatisticsTemplate().execute(this);
     }
 
-    public UFKTeam getWinnerTeam()
+    UFKTeam getWinnerTeam()
     {
         List<SurvivalTeam> teams = new ArrayList<>(this.teams);
         Collections.sort(teams, ((o1, o2) -> ((UFKTeam)o2).getScore() - ((UFKTeam)o1).getScore()));

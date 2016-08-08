@@ -18,19 +18,19 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
-public class RespawnManager implements Listener
+class RespawnManager implements Listener
 {
     private UltraFlagKeeper plugin;
     private Map<UUID, Pair<BukkitTask, Location>> players;
 
-    public RespawnManager(UltraFlagKeeper plugin)
+    RespawnManager(UltraFlagKeeper plugin)
     {
         this.players = new HashMap<>();
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    public void respawn(Player player)
+    void respawn(Player player)
     {
         player.setFireTicks(0);
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.setFireTicks(0), 1L);
@@ -76,7 +76,7 @@ public class RespawnManager implements Listener
         this.players.remove(player.getUniqueId());
     }
 
-    public void cancelAll()
+    void cancelAll()
     {
         Map<UUID, Pair<BukkitTask, Location>> tmp = new HashMap<>(this.players);
         tmp.forEach((uuid, respawnTask) ->

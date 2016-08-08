@@ -13,7 +13,7 @@ public class UFKTeam extends SurvivalTeam
     private Flag flag;
     private int score;
 
-    public UFKTeam(SurvivalTeamGame game, String name, DyeColor color, ChatColor chatColor)
+    UFKTeam(SurvivalTeamGame game, String name, DyeColor color, ChatColor chatColor)
     {
         super(game, name, color, chatColor);
         this.score = 0;
@@ -30,7 +30,7 @@ public class UFKTeam extends SurvivalTeam
         return this.score;
     }
 
-    public void setFlag(Flag flag)
+    void setFlag(Flag flag)
     {
         this.flag = flag;
     }

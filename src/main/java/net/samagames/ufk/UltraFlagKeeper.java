@@ -37,7 +37,7 @@ public class UltraFlagKeeper extends JavaPlugin
     @Override
     public void onEnable()
     {
-        /** Enable DoubleRunner modules */
+        /* Enable DoubleRunner modules */
         SurvivalAPI.get().loadModule(RapidOresModule.class, new CustomRapidOresModuleConfiguration().build());
         SurvivalAPI.get().loadModule(RapidFoodModule.class, new CustomRapidFoodModuleConfiguration().build());
         SurvivalAPI.get().loadModule(RapidUsefullModule.class, new CustomRapidUsefullModuleConfiguration().build());
@@ -67,7 +67,7 @@ public class UltraFlagKeeper extends JavaPlugin
         SurvivalAPI.get().loadModule(AutomaticLapisModule.class, null);
         SurvivalAPI.get().loadModule(OneShieldModule.class, null);
 
-        /** Initiate game */
+        /* Initiate game */
         int nb = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(2)).getAsInt();
         this.game = new UFKGame(this, nb);
         SurvivalAPI.get().unloadModule(RandomChestModule.class);

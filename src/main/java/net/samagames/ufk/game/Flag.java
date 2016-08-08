@@ -201,7 +201,7 @@ public class Flag implements Listener
         return this.team;
     }
 
-    public void setTeam(UFKTeam team)
+    void setTeam(UFKTeam team)
     {
         this.team = team;
     }
@@ -211,12 +211,12 @@ public class Flag implements Listener
         this.captures.add(uuid);
     }
 
-    public List<UUID> getCaptures()
+    List<UUID> getCaptures()
     {
         return this.captures;
     }
 
-    public List<ArmorStand> getArmorStands()
+    List<ArmorStand> getArmorStands()
     {
         return this.armorStands;
     }

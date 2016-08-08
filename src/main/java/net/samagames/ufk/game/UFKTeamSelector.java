@@ -10,7 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class UFKTeamSelector extends SurvivalTeamSelector
+class UFKTeamSelector extends SurvivalTeamSelector
 {
     private UFKGame ufkGame;
 

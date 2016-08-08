@@ -119,6 +119,7 @@ public class UFKListener implements Listener
                 ((UFKTeam)survivalPlayer.getTeam()).setScore(((UFKTeam)survivalPlayer.getTeam()).getScore() + 1);
                 if (((UFKTeam)survivalPlayer.getTeam()).getScore() >= 5)
                     this.plugin.getGame().win(team);
+                Noteblocks.playFlagCapturedMelody(this.plugin);
             }
         });
     }
