@@ -106,7 +106,7 @@ public class UFKListener implements Listener
             if (flag.getWearer() != null && flag.getWearer().equals(event.getPlayer().getUniqueId()) && (survivalPlayer = this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId())) != null && ((UFKTeam)survivalPlayer.getTeam()).getFlag().getLocation().distanceSquared(event.getPlayer().getLocation()) < 25)
             {
                 Flag own = ((UFKTeam)survivalPlayer.getTeam()).getFlag();
-                if (own.getWearer() != null)
+                if (!own.isSafe())
                     return ;
                 SurvivalTeam team = flag.getTeam();
                 flag.addCapture(event.getPlayer().getUniqueId());

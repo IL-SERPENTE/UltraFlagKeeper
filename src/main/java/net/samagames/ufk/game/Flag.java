@@ -42,7 +42,7 @@ public class Flag implements Listener
     private List<ArmorStand> armorStands;
     private BukkitTask effectTask;
 
-    public Flag(UltraFlagKeeper plugin, Location location, byte color)
+    Flag(UltraFlagKeeper plugin, Location location, byte color)
     {
         this.location = location;
         this.location.setY(this.location.getWorld().getHighestBlockYAt(this.location));
@@ -92,7 +92,7 @@ public class Flag implements Listener
         this.temporaryLocations.clear();
     }
 
-    public void foreachFlagBlock(Consumer<Block> consumer)
+    private void foreachFlagBlock(Consumer<Block> consumer)
     {
         this.foreachFlagBlock(this.location.clone(), consumer);
     }
@@ -110,7 +110,7 @@ public class Flag implements Listener
     }
 
     @SuppressWarnings("deprecation")
-    public void drop(Location location)
+    void drop(Location location)
     {
         if (!this.armorStands.isEmpty())
             return ;
@@ -135,7 +135,7 @@ public class Flag implements Listener
         }
     }
 
-    public void unDrop()
+    void unDrop()
     {
         if (this.armorStands.isEmpty())
             return ;
@@ -263,5 +263,10 @@ public class Flag implements Listener
                 this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(((Player)event.getDamager()).getDisplayName() + ChatColor.YELLOW + " a récupéré le drapeau de l'équipe " + this.team.getChatColor() + this.team.getTeamName() + ChatColor.YELLOW + ".", true);
             }
         }
+    }
+
+    public boolean isSafe()
+    {
+        return this.wearer == null && this.armorStands.isEmpty();
     }
 }
