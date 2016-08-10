@@ -41,6 +41,7 @@ public class Flag implements Listener
     private List<UUID> captures;
     private List<ArmorStand> armorStands;
     private BukkitTask effectTask;
+    private BukkitTask respawnTask;
 
     Flag(UltraFlagKeeper plugin, Location location, byte color)
     {
@@ -133,6 +134,12 @@ public class Flag implements Listener
             }
             this.armorStands.add(armorStand);
         }
+        this.respawnTask = this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
+        {
+            this.unDrop();
+            this.respawn();
+            this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(ChatColor.YELLOW + "Le drapeau de l'équipe " + this.team.getChatColor() + this.team.getTeamName() + ChatColor.YELLOW + " est revenu à sa base.", true);
+        }, 600L);
     }
 
     void unDrop()
@@ -141,6 +148,8 @@ public class Flag implements Listener
             return ;
         this.armorStands.forEach(ArmorStand::remove);
         this.armorStands.clear();
+        if (this.respawnTask != null)
+            this.respawnTask.cancel();
     }
 
     public UUID getWearer()
