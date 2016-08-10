@@ -127,8 +127,8 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
             ((UFKGame)this.game).respawnManager.cancelAll();
             if (team == null)
             {
-                this.game.setWorldBorderSize(129.0D);
                 ((UFKGame) this.game).teleportDeathMatch();
+                this.game.setWorldBorderSize(129.0D);
                 this.game.getCoherenceMachine().getMessageManager().writeCustomMessage("Aucune équipe gagnante. Vous êtes donc téléportés pour un match à mort final.", true);
 
                 this.createEndEvent();
