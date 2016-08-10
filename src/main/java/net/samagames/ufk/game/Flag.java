@@ -191,7 +191,7 @@ public class Flag implements Listener
                         player.addPotionEffect(PotionEffectType.WITHER.createEffect(18000, 1));
                         this.effectTask = null;
                     }, 800L);
-                }, 1000L);
+                }, 1400L);
             }
         }
     }
