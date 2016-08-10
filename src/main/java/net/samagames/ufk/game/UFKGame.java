@@ -293,6 +293,7 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
                         Titles.sendTitle(player, 0, 20, 5, ChatColor.RED + "✞", ChatColor.RED + "Vous êtes mort !");
                         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.teleport(finalSpawn), 1L);
                         player.setHealth(20.0D);
+                        player.setFoodLevel(25);
                         player.setVelocity(new Vector().zero());
                         this.respawnManager.respawn(player, spawn);
                     }
