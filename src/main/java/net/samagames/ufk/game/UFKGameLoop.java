@@ -65,6 +65,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
             this.createTeleportationEvent();
             this.blocksProtected = false;
         });
+        this.game.getCoherenceMachine().getMessageManager().writeCustomMessage("Utilisez le /flag pour revenir à votre drapeau pendant la phase de préparation !", true);
         this.flagCommandEnabled = true;
     }
 
