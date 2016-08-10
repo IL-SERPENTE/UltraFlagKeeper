@@ -72,8 +72,14 @@ class UFKGuiSelectorTeam extends GuiSelectTeam
                 {
                     if (!team.isLocked())
                     {
+                        int n = (game.getInGamePlayers().size() + 1) / game.getTeams().size();
                         if (team.canJoin())
                         {
+                            if (team.getPlayersUUID().size() >= n)
+                            {
+                                player.sendMessage(game.getCoherenceMachine().getGameTag() + ChatColor.RED + " Il y a trop de monde dans l'équipe !");
+                                return ;
+                            }
                             if (game.getPlayerTeam(player.getUniqueId()) != null)
                                 game.getPlayerTeam(player.getUniqueId()).removePlayer(player.getUniqueId());
 
