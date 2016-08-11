@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
@@ -69,6 +70,7 @@ class RespawnManager implements Listener
         player.setFlying(false);
         player.setAllowFlight(false);
         player.setFlySpeed(0.2F);
+        player.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(100, 0));
 
         this.players.remove(player.getUniqueId());
     }
