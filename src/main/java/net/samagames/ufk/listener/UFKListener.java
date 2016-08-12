@@ -118,7 +118,7 @@ public class UFKListener implements Listener
                 this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(event.getPlayer().getDisplayName() + ChatColor.YELLOW + " a ramené le drapeau de l'équipe " + team.getChatColor() + team.getTeamName() + ChatColor.YELLOW + " a sa base.", true);
                 ((UFKTeam)survivalPlayer.getTeam()).setScore(((UFKTeam)survivalPlayer.getTeam()).getScore() + 1);
                 if (((UFKTeam)survivalPlayer.getTeam()).getScore() >= 5)
-                    this.plugin.getGame().win(team);
+                    this.plugin.getGame().win(survivalPlayer.getTeam());
                 Noteblocks.playFlagCapturedMelody(this.plugin);
             }
         });
