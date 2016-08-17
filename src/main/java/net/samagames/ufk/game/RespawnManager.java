@@ -70,7 +70,7 @@ class RespawnManager implements Listener
         player.setFlying(false);
         player.setAllowFlight(false);
         player.setFlySpeed(0.2F);
-        player.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(100, 0));
+        player.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(100, 1));
 
         this.players.remove(player.getUniqueId());
     }

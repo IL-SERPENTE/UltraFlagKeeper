@@ -8,15 +8,18 @@ import net.samagames.ufk.game.Flag;
 import net.samagames.ufk.game.UFKStatisticsHelper;
 import net.samagames.ufk.game.UFKTeam;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.WorldLoadEvent;
@@ -54,6 +57,25 @@ public class UFKListener implements Listener
                 event.setCancelled(true);
                 return ;
             }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockPlace(PlayerBucketEmptyEvent event)
+    {
+        if (this.plugin.getGame().getStatus() != Status.IN_GAME || event.getBucket() == Material.MILK_BUCKET)
+            return ;
+        for (Flag flag : this.plugin.getGame().getFlags())
+        {
+            Location location = event.getBlockClicked().getLocation();
+            if (location.getBlockY() > flag.getLocation().getBlockY())
+                location.setY(flag.getLocation().getY());
+            if (flag.getLocation().clone().subtract(0D, 3D, 0D).distanceSquared(location) < 49)
+            {
+                event.getPlayer().sendMessage(ChatColor.RED + "Vous ne pouvez pas placer d" + (event.getBucket() == Material.LAVA_BUCKET ? "e lave" : "'eau") + " aussi près du drapeau.");
+                event.setCancelled(true);
+                return;
+            }
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -136,5 +158,26 @@ public class UFKListener implements Listener
     {
         List<Block> list = new ArrayList<>(event.blockList());
         this.plugin.getGame().getFlags().forEach(flag -> list.stream().filter(block -> block.getLocation().distanceSquared(flag.getLocation()) < 49).forEach(block -> event.blockList().remove(block)));
+    }
+
+    @EventHandler
+    public void onBlockFire(BlockBurnEvent event)
+    {
+        if (event.getBlock().getType() == Material.WOOL || event.getBlock().getType() == Material.FENCE)
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onCraft(PrepareItemCraftEvent event)
+    {
+        if (event.getRecipe().getResult().getType() == Material.WOOL)
+            event.getRecipe().getResult().setType(Material.AIR);
+    }
+
+    @EventHandler
+    public void onDrop(EntitySpawnEvent event)
+    {
+        if (event.getEntityType() == EntityType.DROPPED_ITEM && ((Item)event.getEntity()).getItemStack().getType() == Material.WOOD_BUTTON)
+            event.setCancelled(true);
     }
 }
