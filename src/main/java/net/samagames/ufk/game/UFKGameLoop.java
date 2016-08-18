@@ -142,7 +142,7 @@ public class UFKGameLoop extends RunBasedGameLoop implements Listener
     public void createEndEvent()
     {
         super.createEndEvent();
-        this.nextEvent = this.nextEvent.copy(3, 0);
+        this.nextEvent = this.nextEvent.copy(5, 0);
     }
 
     @SuppressWarnings("deprecation")
