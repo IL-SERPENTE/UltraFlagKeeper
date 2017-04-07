@@ -9,7 +9,6 @@ import net.samagames.survivalapi.modules.block.RapidOresModule;
 import net.samagames.survivalapi.modules.block.TorchThanCoalModule;
 import net.samagames.survivalapi.modules.block.WorldDropModule;
 import net.samagames.survivalapi.modules.combat.OneShootPassiveModule;
-import net.samagames.survivalapi.modules.craft.OneShieldModule;
 import net.samagames.survivalapi.modules.craft.RapidToolsModule;
 import net.samagames.survivalapi.modules.gameplay.AutomaticLapisModule;
 import net.samagames.survivalapi.modules.gameplay.ConstantPotionModule;
@@ -65,7 +64,6 @@ public class UltraFlagKeeper extends JavaPlugin
         SurvivalAPI.get().loadModule(ConstantPotionModule.class, constantPotionConfiguration.build());
         SurvivalAPI.get().loadModule(OneShootPassiveModule.class, null);
         SurvivalAPI.get().loadModule(AutomaticLapisModule.class, null);
-        SurvivalAPI.get().loadModule(OneShieldModule.class, null);
 
         /* Initiate game */
         int nb = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(2)).getAsInt();

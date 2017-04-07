@@ -12,6 +12,7 @@ import net.samagames.survivalapi.game.WaitingBlock;
 import net.samagames.survivalapi.game.types.SurvivalTeamGame;
 import net.samagames.survivalapi.game.types.run.RunBasedTeamGame;
 import net.samagames.survivalapi.game.types.team.SurvivalTeamSelector;
+import net.samagames.tools.ParticleEffect;
 import net.samagames.tools.Titles;
 import net.samagames.ufk.UltraFlagKeeper;
 import org.bukkit.*;
@@ -123,9 +124,9 @@ public class UFKGame extends RunBasedTeamGame<UFKGameLoop> implements Listener
         {
             Player player;
             if (flag.getWearer() == null || (player = this.plugin.getServer().getPlayer(flag.getWearer())) == null)
-                return ;
-            player.getWorld().spawnParticle(Particle.BLOCK_CRACK, player.getLocation().add(0D, 1D, 0D), 3, 0.3D, 1D, 0.3D, 0.1D, new MaterialData(Material.WOOL, flag.getColor()));
-
+                return;
+            ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(Material.WOOL, flag.getColor()), 0.5F, 0.5F, 0.5F, 1F, 3, player.getLocation().add(0D, 1D, 0D));
+            //player.getWorld().spawnParticle(Particle.BLOCK_CRACK, player.getLocation().add(0D, 1D, 0D), 3, 0.3D, 1D, 0.3D, 0.1D, new MaterialData(Material.WOOL, flag.getColor()));
         }), 1L, 1L);
     }
 
