@@ -16,4 +16,4 @@ Pour plus de détails, référez-vous au texte de licence disponible [ici](LICEN
 - CDC (Si existant) : 
 
 ## Description
-UltraFlagKeeper (Run4Flag) est un projet reprenant l'[UHCRun](https://github.com/SamaGames/UHCRun) en y ajoutant une notion de capture de drapeaux (CTF).
+UltraFlagKeeper (Run4Flag) est un projet reprenant le [DoubleRunner](https://github.com/SamaGames/DoubleRunner) en y ajoutant une notion de capture de drapeaux (CTF).
